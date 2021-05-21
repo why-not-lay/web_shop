@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8">
+    <title>登录注册</title>
+    <link rel="stylesheet" href="web_login.css">
+  </head>
+  <body>
+    <div id="">
+      <div class="input_block" id="login">
+        <form action="/login" method="post">
+          <h2>登录商家</h2>
+          <input class="sign-text" type="text" name="username" placeholder="用户名">
+          <input class="sign-text" type="password" name="password" placeholder="密码">
+          <select class = "sign-text" name="type" id="">
+            <option value="">选择商家类型</option>
+            <option value="2">销售人员</option>
+            <option value="3">管理员</option>
+          </select>
+          <input class="sign-btn" type="submit" value="登录">
+          <div class="sign-func">
+            <h3>
+              <a href="/index" >主页</a>
+            </h3>
+          </div>
+          <div class="sign-func" id="tran_register">
+            <h3>
+              <a href="#" >注册</a>
+            </h3>
+          </div>
+        </form>
+      </div>
+
+      <div class="input_block" id="register" style="display:none">
+        <form action="/login" method="post">
+          <h2>注册商家</h2>
+          <input class="sign-text" type="text" name="username" placeholder="用户名">
+          <input class="sign-text" type="text" name="shopname" placeholder="商家名">
+          <input class="sign-text" type="password" name="password" placeholder="密码">
+          <input class="sign-text" type="password" name="confirm_password" placeholder="确认密码">
+          <input class="sign-btn" type="submit" value="注册">
+          <div class="sign-func">
+            <h3>
+              <a href="/index" >主页</a>
+            </h3>
+          </div>
+          <div class="sign-func" id="tran_login">
+            <h3>
+              <a href="#" >登录</a>
+            </h3>
+          </div>
+        </form>
+      </div>
+
+    </div>
+  </body>
+  <script>
+    var ele_register = document.getElementById('register');
+var ele_login = document.getElementById('login');
+document.getElementById('tran_login').onclick = function(){
+  ele_register.style.display = "none";
+  ele_login.style.display = "block";
+}
+document.getElementById('tran_register').onclick = function(){
+
+  ele_login.style.display = "none";
+  ele_register.style.display = "block";
+}
+  </script>
+</html>
+
