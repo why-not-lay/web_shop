@@ -1,25 +1,28 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>电商背景</title>
-    <link rel="stylesheet" href="../static/css/main_page.css">
+    <title>主页</title>
+    <link rel="stylesheet" th:href="@{css/main_page.css}">
+    <link rel="stylesheet" th:href="@{css/shoppingcart.css}">
+    <link rel="stylesheet" th:href="@{css/commodity.css}">
   </head>
   <body>
     <div id="topbar">
       <div class="topbar_func" >
         <div>
-          <a href="#" >logo</a>
+          <a href="/" >logo</a>
         </div>
       </div>
       <div id="fill_container">
       </div>
       <div class="topbar_func" id="user_container">
-        <div>user</div>
+        <div th:if="session.user" th:text="session.user.username">user</div>
         <div class="topbar_dropdown">
-          <div><a href="#">用户</a></div>
-          <div><a href="#">商家</a></div>
+          <div th:unless="session.user"><a href="/user/certify">用户</a></div>
+          <div th:unless="session.user"><a href="/shop/certify">商家</a></div>
+          <div th:if="session.user"><a href="/shop/logout">注销</a></div>
           <div><a href="#">购物车</a></div>
         </div>
       </div>
@@ -40,7 +43,7 @@
       <div id="shoppingcart_body">
         <div id="shoppingcart_top"><h2>全部商品</h2></div>
         <div id="shoppingcart_main">
-          <div id="shoppingcart_head">
+          <div class="shoppingcart_head">
             <div class="shoppingcart_checkbox">
               <input type="checkbox" name="" id="">
             </div>
@@ -53,42 +56,6 @@
 
           <div id="shoppingcart_items_outer">
             <div id="shoppingcart_items">
-              <div class="shoppingcart_item">
-                <div class="shoppingcart_checkbox">
-                  <input type="checkbox" name="" id="">
-                </div>
-                <div class="shoppingcart_commodity">
-                  <div class="shoppingcart_goods">
-                    <div class="shoppingcart_goods_pic">
-
-                    </div>
-                    <div class="shoppingcart_goods_name">
-                      商品一
-                    </div>
-                  </div>
-                </div>
-                <div class="shoppingcart_price">
-                  ￥8888.00
-                </div>
-                <div class="shoppingcart_number">
-                  <div class="shoppingcart_number_container">
-                    <button class="btn_num_minus">
-                      <i></i>
-                    </button>
-                    <input type="number" min="1" step="1" value="1">
-                    <button class="btn_num_plus">
-                      <i></i>
-                    </button>
-
-                  </div>
-                </div>
-                <div class="shoppingcart_sum">￥8888.00</div>
-                <div class="shoppingcart_func">
-                  <div>
-                    删除
-                  </div>
-                </div>
-              </div>
 
             </div>
 
@@ -97,7 +64,7 @@
         <div id="shoppingcart_bottom">
           <div id="shoppingcart_total">
             <span style="font-size: 23px;">总金额: </span>
-            <span style="font-size: 20px;">8888.00</span>
+            <span style="font-size: 20px;">0</span>
           </div>
           <div id="shoppingcart_bottom_func">
             <button id="shoppingcart_bottom_buy">支付订单</button>
@@ -119,7 +86,8 @@
     </div>
 
   </body>
-  <script src="../static/js/tool.js"></script>
-  <script src="../static/js/commodity_container.js"></script>
-  <script src="../static/js/main_page.js"></script>
+  <script th:src="@{js/tool.js}"></script>
+  <script th:src="@{js/shoppincart_container.js}"></script>
+  <script th:src="@{js/commodity_container.js}"></script>
+  <script th:src="@{js/main_page.js}"></script>
 </html>

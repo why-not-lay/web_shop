@@ -23,6 +23,7 @@ public interface CommodityRepository extends JpaRepository<Commodity,Long> {
     Page<Commodity> findByUidAndStatusAndComStatus(Long uid, Integer com_status,Integer status, Pageable pageable);
     Page<Commodity> findByUidAndStatus(Long uid, Integer status, Pageable pageable);
     Page<Commodity> findByStatusAndComStatus(Integer status, Integer com_status, Pageable pageable);
+    Page<Commodity> findByStatusAndComStatusAndType(Integer status, Integer com_status, Integer type, Pageable pageable);
 
     @Transactional
     @Modifying

@@ -1,6 +1,60 @@
 class CommodityContainer {
-  constructor(container){
+  constructor(container,shoppincart_container){
     this.ele_container = container;
+    this.shoppincart_container = shoppincart_container;
+    this.type = 1;
+    this.addCommodity({
+      "cid":"123",
+      "name":"commodity1",
+      "desc":"this is the description for the commodity1",
+      "price":888888,
+      "pic":"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic13.nipic.com%2F20110420%2F2531170_133355088479_2.jpg&refer=http%3A%2F%2Fpic13.nipic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624176549&t=250eb18554f5360712d6b50e01acd95b"
+    });
+
+    var scrollToEnd = ()=>{
+      var scroll_top = getScrollTop();
+      var scroll_height = document.body.scrollHeight;
+      var inner_heght = window.innerHeight;
+      if(scroll_top + inner_heght === scroll_height){
+        console.log("end");
+        // getCOmmodity:  <22-05-21, yourname> //
+      }
+    }
+    var deScrollToEnd = deboune(scrollToEnd,1000);
+    window.addEventListener('scroll',deScrollToEnd);
+  }
+
+  setType(type){
+    this.type = type;
+  }
+
+  fetchNewCommodities(url){
+    var getJsonData = async function(url) {
+      try {
+        var response = await fetch(url);
+        if(response.status === 200){
+          return await response.json();
+        }
+        else{
+          return null;
+        }
+      } catch (e) {
+        console.log(`Request ${url} error`,error);
+        return null;
+      }
+    }
+
+    var data = getJsonData(url);
+    var commodity_data_list = [];
+    for(let data of commodity_data_list){
+      this.addCommodity(data);
+    }
+  }
+
+  clearAllCommodity(){
+    for(var ele of this.ele_container.children){
+      ele.remove();
+    }
   }
 
   addCommodity(commodity_data){
@@ -24,13 +78,15 @@ class CommodityContainer {
   initCommodityValue(ele,commodity_data){
     var commodity_name, commodity_desc, commodity_price,
       commodity_pic_url, commodity_cid;
-    if(commodity_data){
-      commodity_name = commodity_data['name'];
-      commodity_desc = commodity_data['desc'];
-      commodity_price = commodity_data['price'];
-      commodity_pic_url = commodity_data['pic'];
-      commodity_cid = commodity_data["cid"];
+    if(!commodity_data){
+      return;
     }
+    commodity_name = commodity_data['name'];
+    commodity_desc = commodity_data['desc'];
+    commodity_price = commodity_data['price'];
+    commodity_pic_url = commodity_data['pic'];
+    commodity_cid = commodity_data["cid"];
+
     ele.setAttribute('id',commodity_cid);
     ele.getElementsByTagName('img')[0].setAttribute("src",commodity_pic_url);
     ele.getElementsByClassName('commodity_name')[0].firstElementChild.innerText = commodity_name;
@@ -45,16 +101,41 @@ class CommodityContainer {
   initCommodityEvent(ele){
     var btn_minus = ele.getElementsByClassName('btn_num_minus')[0];
     var btn_plus = ele.getElementsByClassName('btn_num_plus')[0];
-    initNumberMinusPlusBtn(btn_minus,btn_plus);
+    var ele_value = btn_minus.nextElementSibling
+    ele_value.addEventListener('change',()=>{
+      var value = Number.parseInt(ele_value.value);
+      if(value < 0) ele_value.value = 0;
+    })
+    btn_minus.addEventListener('click',()=>{
+      var value = Number.parseInt(ele_value.value);
+      btn_minus.nextElementSibling.value = value - 1 <= 0 ? 0 : value - 1;
+    })
+    btn_plus.addEventListener('click',()=>{
+      var value = Number.parseInt(ele_value.value);
+      btn_minus.nextElementSibling.value = value + 1;
+    })
 
     var btn_buy = ele.getElementsByClassName('commodity_trade_item')[0];
     var btn_shoppingcart = ele.getElementsByClassName('commodity_trade_item')[1];
     btn_buy.addEventListener('click',()=>{
-
+      // 发送购买订单:  <21-05-21, yourname> //
     })
     btn_shoppingcart.addEventListener('click',()=>{
-
+      var number = ele_value.value;
+      var cid = ele.getAttribute('id');
+      var name = ele.getElementsByClassName('commodity_name')[0].innerText;
+      var pic_url = ele.getElementsByTagName('img')[0].getAttribute('src');
+      var price = ele.getElementsByClassName('commodity_price')[0].children[1].innerText;
+      this.shoppincart_container.addShoppingcart({
+        "cid":cid,
+        "price":price,
+        "number":number,
+        "name":name,
+        "pic":pic_url
+      });
     })
+
+
 
   }
 
@@ -67,11 +148,6 @@ class CommodityContainer {
 
 
   createCommodityContainer(){
-    var createClassEle = (ele_type, classname)=>{
-      var ele = document.createElement(ele_type);
-      ele.setAttribute('class',classname);
-      return ele;
-    }
     var total_container = createClassEle('div','commodity');
     var pic_container = createClassEle('div','commodity_pic');
     pic_container.append(document.createElement('img'));

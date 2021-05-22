@@ -22,7 +22,7 @@ public class MainPage {
         Integer code = Util.isLogin(session);
         if (code == Constant.UserType.ADMIN || code == Constant.UserType.SELLER)
             return "redirect:/shop";
-        return "main";
+        return "main_page";
     }
 
 }

@@ -1,21 +1,21 @@
 <!DOCTYPE html>
-<html>
+<html xmlns:th="http://www.thymeleaf.org">
   <head>
     <meta charset="utf-8">
     <title>登录注册</title>
-    <link rel="stylesheet" href="web_login.css">
+    <link rel="stylesheet" href="@{css/certify.css}">
   </head>
   <body>
     <div id="">
       <div class="input_block" id="login">
-        <form action="/login" method="post">
+        <form action="/user/login" method="post">
           <h2>登录账户</h2>
           <input class="sign-text" type="text" name="username" placeholder="用户名">
           <input class="sign-text" type="password" name="password" placeholder="密码">
           <input class="sign-btn" type="submit" value="登录">
           <div class="sign-func">
             <h3>
-              <a href="/index" >主页</a>
+              <a href="/" >主页</a>
             </h3>
           </div>
           <div class="sign-func" id="tran_register">
@@ -27,7 +27,7 @@
       </div>
 
       <div class="input_block" id="register" style="display:none">
-        <form action="/login" method="post">
+        <form action="/user/register" method="post">
           <h2>注册账户</h2>
           <input class="sign-text" type="text" name="username" placeholder="用户名">
           <input class="sign-text" type="email" name="mail" placeholder="邮箱">
@@ -36,7 +36,7 @@
           <input class="sign-btn" type="submit" value="注册">
           <div class="sign-func">
             <h3>
-              <a href="/index" >主页</a>
+              <a href="/" >主页</a>
             </h3>
           </div>
           <div class="sign-func" id="tran_login">

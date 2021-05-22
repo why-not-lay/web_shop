@@ -41,18 +41,27 @@ public class UserController {
     @Autowired
     private HttpSession session;
 
-
-    @RequestMapping(value="/login",method =RequestMethod.GET)
-    public String getLoginPage() {
-        // 判断是否已经登录，已经登录则重定向
+    @RequestMapping(value = "/certify",method = RequestMethod.GET)
+    public String getCertityPage() {
         Integer code = Util.isLogin(session);
         if (code == Constant.UserType.USER)
             return "redirect:/";
         if (code == Constant.UserType.ADMIN || code == Constant.UserType.SELLER)
             return "redirect:/shop";
-
-        return "login";
+        return "main_page";
     }
+
+    //@RequestMapping(value="/login",method =RequestMethod.GET)
+    //public String getLoginPage() {
+    //    // 判断是否已经登录，已经登录则重定向
+    //    Integer code = Util.isLogin(session);
+    //    if (code == Constant.UserType.USER)
+    //        return "redirect:/";
+    //    if (code == Constant.UserType.ADMIN || code == Constant.UserType.SELLER)
+    //        return "redirect:/shop";
+
+    //    return "login";
+    //}
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public String login(
@@ -87,15 +96,15 @@ public class UserController {
     }
 
 
-    @RequestMapping(value="/register",method=RequestMethod.GET)
-    public String getRegisterPage() {
-        Integer code = Util.isLogin(session);
-        if (code == Constant.UserType.USER)
-            return "redirect:/";
-        if (code == Constant.UserType.ADMIN || code == Constant.UserType.SELLER)
-            return "redirect:/shop";
-        return "register";
-    }
+    //@RequestMapping(value="/register",method=RequestMethod.GET)
+    //public String getRegisterPage() {
+    //    Integer code = Util.isLogin(session);
+    //    if (code == Constant.UserType.USER)
+    //        return "redirect:/";
+    //    if (code == Constant.UserType.ADMIN || code == Constant.UserType.SELLER)
+    //        return "redirect:/shop";
+    //    return "register";
+    //}
 
     @RequestMapping(value="/register",method=RequestMethod.POST)
     public String register(
@@ -149,24 +158,24 @@ public class UserController {
         return "redirect:/";
     }
 
-    @RequestMapping(value = "commodity", method = RequestMethod.POST)
-    public String getCommodityPage(@RequestParam(required = false) String cid, ModelMap model) {
-        Integer code = Util.isLogin(session);
-        if(code == Constant.UserType.ADMIN || code ==Constant.UserType.SELLER)
-            return "/shop/";
+    //@RequestMapping(value = "commodity", method = RequestMethod.POST)
+    //public String getCommodityPage(@RequestParam(required = false) String cid, ModelMap model) {
+    //    Integer code = Util.isLogin(session);
+    //    if(code == Constant.UserType.ADMIN || code ==Constant.UserType.SELLER)
+    //        return "/shop/";
 
-        DataCommodity data_commodity = null;
-        Commodity commodity_onSale = commodityRepository.findByCidAndStatusAndComStatus(Long.parseLong(cid), Constant.RecordStatus.EXIST, Constant.CommodityStatus.ON_SALE);
-        Commodity commodity_outOfStock = commodityRepository.findByCidAndStatusAndComStatus(Long.parseLong(cid), Constant.RecordStatus.EXIST, Constant.CommodityStatus.OUT_OF_STOCK);
-        if(commodity_onSale != null) {
-            data_commodity = Util.tran2DataCommodity(commodity_onSale);
-        }
-        if(commodity_outOfStock != null) {
-            data_commodity = Util.tran2DataCommodity(commodity_outOfStock);
-        }
-        if(data_commodity == null)
-            return "redirect:/";
-        model.addAttribute("commodity", data_commodity);
-        return "commodity";
-    }
+    //    DataCommodity data_commodity = null;
+    //    Commodity commodity_onSale = commodityRepository.findByCidAndStatusAndComStatus(Long.parseLong(cid), Constant.RecordStatus.EXIST, Constant.CommodityStatus.ON_SALE);
+    //    Commodity commodity_outOfStock = commodityRepository.findByCidAndStatusAndComStatus(Long.parseLong(cid), Constant.RecordStatus.EXIST, Constant.CommodityStatus.OUT_OF_STOCK);
+    //    if(commodity_onSale != null) {
+    //        data_commodity = Util.tran2DataCommodity(commodity_onSale);
+    //    }
+    //    if(commodity_outOfStock != null) {
+    //        data_commodity = Util.tran2DataCommodity(commodity_outOfStock);
+    //    }
+    //    if(data_commodity == null)
+    //        return "redirect:/";
+    //    model.addAttribute("commodity", data_commodity);
+    //    return "commodity";
+    //}
 }

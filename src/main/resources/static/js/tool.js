@@ -1,28 +1,35 @@
-var initNumberMinusPlusBtn = function(btn_minus,btn_plus) {
-  var ele_value = btn_minus.nextElementSibling
-  ele_value.addEventListener('change',()=>{
-    var value = Number.parseInt(ele_value.value);
-    if(value < 0) ele_value.value = 0;
-  })
-  btn_minus.addEventListener('click',()=>{
-    var value = Number.parseInt(ele_value.value);
-    btn_minus.nextElementSibling.value = value - 1 <= 0 ? 0 : value - 1;
-  })
-  btn_plus.addEventListener('click',()=>{
-    var value = Number.parseInt(ele_value.value);
-    btn_minus.nextElementSibling.value = value + 1;
-  })
-}
 
+var createClassEle = function(ele_type, classname){
+  var ele = document.createElement(ele_type);
+  ele.setAttribute('class',classname);
+  return ele;
+}
 
 var deboune = function(fn,delay) {
   var timer;
   return function() {
+    var that = this;
+    var argus = arguments;
     if(timer){
-      clearTimeout(timer);
+      return;
     }
-    timer = setTimeout(fn,delay);
+    timer = setTimeout(function(){
+      fn.apply(that,argus);
+      clearTimeout(timer);
+      timer = null;
+    },delay);
   }
+}
+
+var getScrollTop = function(){
+  var scroll_top = 0;
+  if(document.documentElement && document.documentElement.scrollTop){
+    scroll_top = document.documentElement.scrollTop;
+  }
+  else if(document.body){
+    scroll_top = document.body.scrollTop;
+  }
+  return scroll_top;
 }
 
 

@@ -160,14 +160,17 @@ public class CommodityController {
         return APIResult.createNG("删除成功");
     }
 
-    @RequestMapping(value = "/get")
+    @RequestMapping(value = "/get", method = RequestMethod.GET)
     public APIResult getCommodity(
         @RequestParam(required = false,defaultValue = "0") String page,
-        @RequestParam(required = false,defaultValue = "20") String number) {
+        @RequestParam(required = false,defaultValue = "10") String number,
+        @RequestParam(required = false,defaultValue = "10") String type) {
 
         if(!Util.Certify.certifyNumber(page))
             return APIResult.createNG("格式错误");
         if(!Util.Certify.certifyNumber(number))
+            return APIResult.createNG("格式错误");
+        if(!Util.Certify.certifyNumber(type))
             return APIResult.createNG("格式错误");
 
         Integer code = Util.isLogin(session);
@@ -175,6 +178,7 @@ public class CommodityController {
         List<DataCommodity> data_commodities = null;
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(number));
         User user = (User)session.getAttribute("user");
+        Integer commodity_type = Integer.parseInt(type);
         if(code == Constant.UserType.SELLER) {
             Page<Commodity> commodities_container = commodityRepository.findByUidAndStatus(user.getUid(), Constant.RecordStatus.EXIST, pageable);
             commodities = commodities_container.getContent();
@@ -191,13 +195,15 @@ public class CommodityController {
                 }
             }
         } else {
-            Page<Commodity> commodities_container_onSale = commodityRepository.findByStatusAndComStatus(Constant.RecordStatus.EXIST, Constant.CommodityStatus.ON_SALE, pageable);
-            Page<Commodity> commodities_container_outOfStock = commodityRepository.findByStatusAndComStatus(Constant.RecordStatus.EXIST, Constant.CommodityStatus.OUT_OF_STOCK, pageable);
+            Page<Commodity> commodities_container_onSale = null;
+            if(commodity_type == 10) {
+                commodities_container_onSale = commodityRepository.findByStatusAndComStatus(Constant.RecordStatus.EXIST, Constant.CommodityStatus.ON_SALE, pageable);
+            } else {
+                commodities_container_onSale = commodityRepository.findByStatusAndComStatusAndType(Constant.RecordStatus.EXIST, Constant.CommodityStatus.ON_SALE,commodity_type, pageable);
+            }
             List<Commodity> commodities_onSale = commodities_container_onSale.getContent();
-            List<Commodity> commodities_outOfStock = commodities_container_outOfStock.getContent();
             data_commodities = new ArrayList<DataCommodity>();
             data_commodities.addAll(Util.tran2DataCommodityList(commodities_onSale,null));
-            data_commodities.addAll(Util.tran2DataCommodityList(commodities_outOfStock,null));
         }
         return APIResult.createOK(data_commodities);
     }
