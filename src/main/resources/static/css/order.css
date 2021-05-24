@@ -1,0 +1,138 @@
+body{
+  margin:0;
+  padding:0;
+  background-color:#2f3542;
+}
+#order_container{
+  width: 800px;
+  padding:20px;
+  margin: 50px auto;
+  border-radius:20px;
+  display:flex;
+  align-items:center;
+  background-color:#f0f0f4;
+}
+#order_top{
+  text-align:center;
+}
+#order_body{
+  height:100%;
+  width:100%;
+}
+#order_main{
+  display:flex;
+  height: 80%;
+  flex-direction: column;
+}
+.order_head{
+  display:flex;
+  margin:auto;
+  width:700px;
+  height: 40px;
+  line-height:40px;
+  text-align:center;
+  border-bottom: 2px solid black;
+}
+.order_item{
+  display:flex;
+  margin:auto;
+  width:700px;
+  height:80px;
+  margin-top:10px;
+  line-height:80px;
+  text-align:center;
+}
+.order_commodity{
+  width:40%;
+  height:100%;
+}
+.order_goods{
+  margin:2px;
+  display:flex;
+}
+.order_goods_pic{
+  width:75px;
+  height:75px;
+}
+.order_goods_pic img{
+  max-width:100%;
+  max-height:100%;
+}
+.order_goods_name{
+  margin-left:10px;
+}
+.order_price{
+  width:20%;
+  height:100%;
+}
+.order_number{
+  width:20%;
+  height:100%;
+}
+.order_sum{
+  width:20%;
+  height:100%;
+}
+#order_bottom{
+  height: 100%;
+  margin-top:20px;
+  border-top:2px solid black;
+}
+#order_total{
+  margin:5px;
+  margin-right:10px;
+  text-align:right;
+}
+#order_bottom_buy, #order_bottom_cancel{
+  float: right;
+  margin-right:10px;
+  margin-top:5px;
+  width: 100px;
+  height:60px;
+  background-color:#df3033;
+  text-decoration:none;
+  font-size:18px;
+  border:none;
+  color:white;
+  cursor: pointer;
+}
+
+#confirm_order{
+  display:none;
+  position: fixed;
+  width: 100vw;
+  height:100vh;
+  top:0;
+  left:0;
+  background-color: rgba(0,0,0,0.8);
+}
+#qrcode_container{
+  position: absolute;
+  top: 40%;
+  left: 50%;
+  transform: translateX(-50%) translateY(-50%);
+}
+#qrcode{
+  padding:15px;
+  width:256px;
+  height:256px;
+  background-color:#fff;
+}
+#confirm_buy{
+  width:100%;
+  height:50px;
+  text-align:center;
+  border-bottom-left-radius: 25px;
+  border-bottom-right-radius: 25px;
+  background-color:#fff;
+}
+#confirm_buy:hover{
+  background-color:gray;
+}
+#confirm_buy a{
+  text-decoration:none;
+  line-height:50px;
+  font-size:30px;
+  color: #000;
+}
+

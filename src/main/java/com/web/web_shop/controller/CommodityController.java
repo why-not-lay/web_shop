@@ -182,14 +182,14 @@ public class CommodityController {
         if(code == Constant.UserType.SELLER) {
             Page<Commodity> commodities_container = commodityRepository.findByUidAndStatus(user.getUid(), Constant.RecordStatus.EXIST, pageable);
             commodities = commodities_container.getContent();
-            data_commodities = Util.tran2DataCommodityList(commodities,null);
+            data_commodities = Util.tran2DataCommodityList(commodities,null,false);
         } else if(code == Constant.UserType.ADMIN) {
             List<User> sellers = userRepository.findByParentAndStatus(user.getUid(),Constant.RecordStatus.EXIST);
             data_commodities = new ArrayList<DataCommodity>();
             for(User seller : sellers) {
                 Page<Commodity> commodities_container = commodityRepository.findByUidAndStatus(seller.getUid(), Constant.RecordStatus.EXIST, pageable);
                 commodities = commodities_container.getContent();
-                List<DataCommodity> part_data_comdities = Util.tran2DataCommodityList(commodities,user.getUsername());
+                List<DataCommodity> part_data_comdities = Util.tran2DataCommodityList(commodities,user.getUsername(),false);
                 for(DataCommodity data_commodity: part_data_comdities) {
                     data_commodities.add(data_commodity);
                 }
@@ -203,7 +203,7 @@ public class CommodityController {
             }
             List<Commodity> commodities_onSale = commodities_container_onSale.getContent();
             data_commodities = new ArrayList<DataCommodity>();
-            data_commodities.addAll(Util.tran2DataCommodityList(commodities_onSale,null));
+            data_commodities.addAll(Util.tran2DataCommodityList(commodities_onSale,null,true));
         }
         return APIResult.createOK(data_commodities);
     }

@@ -3,13 +3,29 @@ class CommodityContainer {
     this.ele_container = container;
     this.shoppincart_container = shoppincart_container;
     this.type = 1;
-    this.addCommodity({
-      "cid":"123",
-      "name":"commodity1",
-      "desc":"this is the description for the commodity1",
-      "price":888888,
-      "pic":"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic13.nipic.com%2F20110420%2F2531170_133355088479_2.jpg&refer=http%3A%2F%2Fpic13.nipic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624176549&t=250eb18554f5360712d6b50e01acd95b"
+    //this.addCommodity({
+    //  "cid":"123",
+    //  "name":"commodity1",
+    //  "desc":"this is the description for the commodity1",
+    //  "price":888888,
+    //  "pic":"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic13.nipic.com%2F20110420%2F2531170_133355088479_2.jpg&refer=http%3A%2F%2Fpic13.nipic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624176549&t=250eb18554f5360712d6b50e01acd95b"
+    //});
+    this.fetchNewCommodities("/commodity/get");
+    this.ele_container.addEventListener('click',(e)=>{
+      var ele_target = e.target;
+      if(ele_target.getAttribute('class') === "commodity_trade_item commodity_trade_item_buy"){
+        var ele_top = e.path[5];
+        var cid = Number.parseInt(ele_top.getAttribute('cid'));
+        var number = Number.parseInt(ele_top.getElementsByTagName('input')[0].value);
+        var data = [{
+          "c":cid,
+          "n":number
+        }]
+        docCookies.setItem("order",JSON.stringify(data));
+        window.location.assign("/user/order");
+      }
     });
+
 
     var scrollToEnd = ()=>{
       var scroll_top = getScrollTop();
@@ -29,26 +45,23 @@ class CommodityContainer {
   }
 
   fetchNewCommodities(url){
-    var getJsonData = async function(url) {
-      try {
-        var response = await fetch(url);
-        if(response.status === 200){
-          return await response.json();
-        }
-        else{
-          return null;
-        }
-      } catch (e) {
-        console.log(`Request ${url} error`,error);
-        return null;
-      }
-    }
+    var promise = getJSON(url);
+    promise.then((json)=>{
+      if(json['code'] !== 200) return;
+      var commodities = json['data'].map((commodity)=>{
+        return {
+          "cid":commodity['cid'],
+          "name":commodity['name'],
+          "desc":commodity['description'],
+          "price":commodity['price'],
+          "pic":""
 
-    var data = getJsonData(url);
-    var commodity_data_list = [];
-    for(let data of commodity_data_list){
-      this.addCommodity(data);
-    }
+        }
+      })
+      for(let commodity of commodities){
+        this.addCommodity(commodity);
+      }
+    })
   }
 
   clearAllCommodity(){
@@ -87,7 +100,7 @@ class CommodityContainer {
     commodity_pic_url = commodity_data['pic'];
     commodity_cid = commodity_data["cid"];
 
-    ele.setAttribute('id',commodity_cid);
+    ele.setAttribute('cid',commodity_cid);
     ele.getElementsByTagName('img')[0].setAttribute("src",commodity_pic_url);
     ele.getElementsByClassName('commodity_name')[0].firstElementChild.innerText = commodity_name;
     ele.getElementsByClassName('commodity_desc')[0].firstElementChild.innerText = commodity_desc;
@@ -122,7 +135,7 @@ class CommodityContainer {
     })
     btn_shoppingcart.addEventListener('click',()=>{
       var number = ele_value.value;
-      var cid = ele.getAttribute('id');
+      var cid = ele.getAttribute('cid');
       var name = ele.getElementsByClassName('commodity_name')[0].innerText;
       var pic_url = ele.getElementsByTagName('img')[0].getAttribute('src');
       var price = ele.getElementsByClassName('commodity_price')[0].children[1].innerText;
@@ -188,7 +201,7 @@ class CommodityContainer {
 
     var func = createClassEle('div','commodity_func');
     div = createClassEle('div','commodity_trade');
-    button = createClassEle('button','commodity_trade_item');
+    button = createClassEle('button','commodity_trade_item commodity_trade_item_buy');
     button.innerText = "立即购买";
     div.append(button);
     button = createClassEle('button','commodity_trade_item');

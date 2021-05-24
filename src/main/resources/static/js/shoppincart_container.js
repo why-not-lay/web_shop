@@ -2,6 +2,7 @@ class ShoppingcartContainer{
   constructor(container){
     this.ele_container = container;
     this.ele_cid = {};
+    this.globalInit();
   }
 
   updateTotalMoney(){
@@ -12,6 +13,36 @@ class ShoppingcartContainer{
       sum += Number.parseInt(value.innerText);
     }
     ele.innerText = sum;
+  }
+
+  globalInit(){
+    document.getElementById('shoppingcart_bottom_buy').addEventListener('click',()=>{
+      try {
+        var cids = Object.keys(this.ele_cid);
+        var data = [];
+        for(let cid of cids){
+          let ele = this.ele_cid[cid];
+          if(ele.getElementsByTagName('input')[0].checked){
+            let number = Number.parseInt(ele.getElementsByClassName('shoppingcart_number')[0].innerText);
+            data.append({
+              "c":Number.parseInt(cid),
+              "n":number
+            });
+            ele.remove();
+            delete this.ele_cid[cid];
+          }
+        }
+        if(Object.keys(data).length === 0){
+          console.log("请选择商品");
+          return;
+        }
+        docCookies.setItem('order',JSON.stringify(data));
+        window.location.assign("/user/order");
+      } catch (e) {
+        console.log(e,error);
+      }
+
+    })
   }
 
   initShoppingcartValue(ele,shoppingcart_data){
@@ -68,7 +99,6 @@ class ShoppingcartContainer{
       delete this.ele_cid[cid];
       ele.remove();
       this.updateTotalMoney();
-      // TODO:cookies  <22-05-21, yourname> //
     })
 
   }

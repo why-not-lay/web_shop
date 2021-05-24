@@ -1,10 +1,15 @@
 package com.web.web_shop.controller;
 
+import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.type.CollectionType;
 import com.web.web_shop.DAO.CommodityRepository;
 import com.web.web_shop.DAO.OnlineRecordRepository;
 import com.web.web_shop.DAO.UserRepository;
@@ -13,12 +18,14 @@ import com.web.web_shop.Tool.Util;
 import com.web.web_shop.beans.APIResult;
 import com.web.web_shop.beans.Commodity;
 import com.web.web_shop.beans.DataCommodity;
+import com.web.web_shop.beans.DataOrder;
 import com.web.web_shop.beans.OnlineRecord;
 import com.web.web_shop.beans.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,20 +55,8 @@ public class UserController {
             return "redirect:/";
         if (code == Constant.UserType.ADMIN || code == Constant.UserType.SELLER)
             return "redirect:/shop";
-        return "main_page";
+        return "certify_user";
     }
-
-    //@RequestMapping(value="/login",method =RequestMethod.GET)
-    //public String getLoginPage() {
-    //    // 判断是否已经登录，已经登录则重定向
-    //    Integer code = Util.isLogin(session);
-    //    if (code == Constant.UserType.USER)
-    //        return "redirect:/";
-    //    if (code == Constant.UserType.ADMIN || code == Constant.UserType.SELLER)
-    //        return "redirect:/shop";
-
-    //    return "login";
-    //}
 
     @RequestMapping(value = "/login",method = RequestMethod.POST)
     public String login(
@@ -158,24 +153,64 @@ public class UserController {
         return "redirect:/";
     }
 
-    //@RequestMapping(value = "commodity", method = RequestMethod.POST)
-    //public String getCommodityPage(@RequestParam(required = false) String cid, ModelMap model) {
-    //    Integer code = Util.isLogin(session);
-    //    if(code == Constant.UserType.ADMIN || code ==Constant.UserType.SELLER)
-    //        return "/shop/";
+    @RequestMapping(value = "order",method = RequestMethod.GET)
+    public String order(
+        @CookieValue(value = "order",defaultValue = "") String json,
+        HttpServletResponse response,
+        ModelMap modelMap) {
+        Integer code = Util.isLogin(session);
+        if (code == Constant.UserType.ADMIN || code == Constant.UserType.SELLER)
+            return "redirect:/shop/";
+        if (code == Constant.UserType.NOT_USER)
+            return "redirect:/";
 
-    //    DataCommodity data_commodity = null;
-    //    Commodity commodity_onSale = commodityRepository.findByCidAndStatusAndComStatus(Long.parseLong(cid), Constant.RecordStatus.EXIST, Constant.CommodityStatus.ON_SALE);
-    //    Commodity commodity_outOfStock = commodityRepository.findByCidAndStatusAndComStatus(Long.parseLong(cid), Constant.RecordStatus.EXIST, Constant.CommodityStatus.OUT_OF_STOCK);
-    //    if(commodity_onSale != null) {
-    //        data_commodity = Util.tran2DataCommodity(commodity_onSale);
-    //    }
-    //    if(commodity_outOfStock != null) {
-    //        data_commodity = Util.tran2DataCommodity(commodity_outOfStock);
-    //    }
-    //    if(data_commodity == null)
-    //        return "redirect:/";
-    //    model.addAttribute("commodity", data_commodity);
-    //    return "commodity";
-    //}
+        ObjectMapper mapper = new ObjectMapper();
+        CollectionType java_type = mapper.getTypeFactory().constructCollectionType(List.class, DataOrder.class);
+        List<DataOrder> orders = null;
+        try {
+            orders = mapper.readValue(json, java_type);
+        } catch(Exception e) {
+            e.printStackTrace();
+        }
+        //DataOrder[] orders = mapper.readValue(order,DataOrder[].class);
+        for(DataOrder order: orders) {
+            System.out.println(order.getCid());
+            System.out.println(order.getNumber());
+        }
+
+        List<Commodity> commodities = new ArrayList<Commodity>();
+        Integer total = 0;
+
+        for(DataOrder order : orders) {
+            Commodity commodity = commodityRepository.findByCidAndStatusAndComStatus(order.getCid(), Constant.RecordStatus.EXIST, Constant.CommodityStatus.ON_SALE);
+            if(commodity == null) {
+                return "redirect:/";
+            }
+            if(commodity.getCurNumber() < order.getNumber()) {
+                return "redirect:/";
+            }
+            commodity.setCurNumber(order.getNumber());
+            total +=order.getNumber() * commodity.getPrice();
+            commodities.add(commodity);
+        }
+        modelMap.addAttribute("order", commodities);
+        modelMap.addAttribute("total", total);
+
+        Cookie cookie = new Cookie("order",null);
+        cookie.setMaxAge(0);
+        response.addCookie(cookie);
+
+        return "order";
+    }
+
+    @RequestMapping(value = "finishTrade",method = RequestMethod.GET)
+    public String finishTrade() {
+        Integer code = Util.isLogin(session);
+        if (code == Constant.UserType.ADMIN || code == Constant.UserType.SELLER)
+            return "redirect:/shop/";
+        if (code == Constant.UserType.NOT_USER)
+            return "redirect:/";
+        return "message";
+    }
+
 }

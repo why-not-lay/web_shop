@@ -3,10 +3,10 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width" />
-    <title>主页</title>
-    <link rel="stylesheet" th:href="@{css/main_page.css}">
-    <link rel="stylesheet" th:href="@{css/shoppingcart.css}">
-    <link rel="stylesheet" th:href="@{css/commodity.css}">
+    <title>商品主页</title>
+    <link rel="stylesheet" href="/css/main_page.css">
+    <link rel="stylesheet" href="/css/shoppingcart.css">
+    <link rel="stylesheet" href="/css/commodity.css">
   </head>
   <body>
     <div id="topbar">
@@ -18,11 +18,12 @@
       <div id="fill_container">
       </div>
       <div class="topbar_func" id="user_container">
-        <div th:if="session.user" th:text="session.user.username">user</div>
+        <div th:if="${session.user}" th:text="${session.user.username}">user</div>
+        <div th:unless="${session.user}" th:text="user">user</div>
         <div class="topbar_dropdown">
-          <div th:unless="session.user"><a href="/user/certify">用户</a></div>
-          <div th:unless="session.user"><a href="/shop/certify">商家</a></div>
-          <div th:if="session.user"><a href="/shop/logout">注销</a></div>
+          <div th:unless="${session.user}"><a href="/user/certify">用户</a></div>
+          <div th:unless="${session.user}"><a href="/shop/certify">商家</a></div>
+          <div th:if="${session.user}"><a href="/user/logout">注销</a></div>
           <div><a href="#">购物车</a></div>
         </div>
       </div>
@@ -77,17 +78,17 @@
     </div>
 
     <div id="type_container">
-      <div type="1" class="type" id="type_seleted">全部</div>
+      <div type="10" class="type" id="type_seleted">全部</div>
       <div type="1" class="type">衣</div>
-      <div type="1" class="type">食</div>
-      <div type="1" class="type">住</div>
-      <div type="1" class="type">行</div>
-      <div type="1" class="type">用</div>
+      <div type="2" class="type">食</div>
+      <div type="3" class="type">住</div>
+      <div type="4" class="type">行</div>
+      <div type="5" class="type">用</div>
     </div>
 
   </body>
-  <script th:src="@{js/tool.js}"></script>
-  <script th:src="@{js/shoppincart_container.js}"></script>
-  <script th:src="@{js/commodity_container.js}"></script>
-  <script th:src="@{js/main_page.js}"></script>
+  <script src="/js/tool.js"></script>
+  <script src="/js/shoppincart_container.js"></script>
+  <script src="/js/commodity_container.js"></script>
+  <script src="/js/main_page.js"></script>
 </html>

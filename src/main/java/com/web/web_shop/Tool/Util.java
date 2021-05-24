@@ -62,38 +62,37 @@ public class Util {
         return user.getType();
     }
 
-    public static List<DataCommodity> tran2DataCommodityList(List<Commodity> commodities, String seller_name) {
+    public static List<DataCommodity> tran2DataCommodityList(List<Commodity> commodities, String seller_name, Boolean for_user) {
         List<DataCommodity> data_commodities = null;
         if(commodities == null) return null;
         data_commodities = new ArrayList<DataCommodity>();
         for(Commodity commodity : commodities) {
-            DataCommodity data_commodity = tran2DataCommodity(commodity);
-            //DataCommodity data_commodity = new DataCommodity();
-            //data_commodity.setCid(commodity.getCid());
-            //data_commodity.setName(commodity.getName());
-            //data_commodity.setType(commodity.getType());
-            //data_commodity.setPrice(commodity.getPrice());
-            //data_commodity.setCom_status(commodity.getComStatus());
-            //data_commodity.setTotal_number(commodity.getTotalNumber());
-            //data_commodity.setCur_number(commodity.getCurNumber());
-            //data_commodity.setDescription(commodity.getDescription());
+            DataCommodity data_commodity = tran2DataCommodity(commodity,for_user);
             data_commodity.setSeller_name(seller_name);
             data_commodities.add(data_commodity);
         }
         return data_commodities;
     }
 
-    public static DataCommodity tran2DataCommodity(Commodity commodity) {
+    public static DataCommodity tran2DataCommodity(Commodity commodity, Boolean for_user) {
         if(commodity == null) return null;
         DataCommodity data_commodity = new DataCommodity();
         data_commodity.setCid(commodity.getCid());
         data_commodity.setName(commodity.getName());
         data_commodity.setType(commodity.getType());
         data_commodity.setPrice(commodity.getPrice());
-        data_commodity.setCom_status(commodity.getComStatus());
-        data_commodity.setTotal_number(commodity.getTotalNumber());
-        data_commodity.setCur_number(commodity.getCurNumber());
         data_commodity.setDescription(commodity.getDescription());
+        if(for_user) {
+
+            data_commodity.setCom_status(1);
+            data_commodity.setTotal_number(0);
+            data_commodity.setCur_number(0);
+        } else {
+
+            data_commodity.setCom_status(commodity.getComStatus());
+            data_commodity.setTotal_number(commodity.getTotalNumber());
+            data_commodity.setCur_number(commodity.getCurNumber());
+        }
         return data_commodity;
     }
     public static class Certify {

@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>交易成功</title>
+  </head>
+  <style>
+*{
+  margin:0;
+  padding:0;
+}
+
+body{
+  background-color:#2f3542;
+}
+#message_container{
+  position: absolute;
+  top:30%;
+  left:50%;
+  transform:translateX(-50%);
+  width:500px;
+  padding:10px;
+  border-radius:10px;
+  background-color:#fff;
+  text-align:center;
+}
+#body_container{
+  margin-top:10px;
+  padding-top:5px;
+  padding-bottom:5px;
+  border-top:2px solid #000;
+  font-size:20px;
+}
+#link_container a{
+  text-decoration:none;
+}
+  </style>
+  <body>
+    <div id="message_container" >
+      <div id="title_container">
+        <h2>消息标题</h2>
+      </div>
+      <div id="body_container" class="simple">
+        购买成功，已发送邮箱
+      </div>
+      <div id="link_container">
+        <a href="/" >返回主页</a>
+      </div>
+    </div>
+    <div id="footer">
+
+    </div>
+
+  </body>
+  <script>
+
+  </script>
+</html>

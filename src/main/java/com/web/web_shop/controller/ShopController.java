@@ -57,7 +57,7 @@ public class ShopController {
             return "redirect:/";
         if(code== Constant.UserType.ADMIN || code == Constant.UserType.SELLER)
             return "redirect:/shop";
-        return "shop_certify";
+        return "certify_shop";
     }
 
     @RequestMapping(value="/login",method = RequestMethod.POST)

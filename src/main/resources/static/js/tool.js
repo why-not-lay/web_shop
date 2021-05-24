@@ -1,3 +1,11 @@
+async function getJSON(url) {
+  try {
+    let response = await fetch(url);
+    return await response.json();
+  } catch (error) {
+    console.log('Request Failed', error);
+  }
+}
 
 var createClassEle = function(ele_type, classname){
   var ele = document.createElement(ele_type);

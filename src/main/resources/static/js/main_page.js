@@ -36,7 +36,9 @@
         ele_type_cur.removeAttribute("id");
         ele.setAttribute("id","type_seleted");
         ele_type_cur = ele;
-        // 获取:  <22-05-21, yourname> //
+        var type = ele.getAttribute('type');
+        commodity_container.clearAllCommodity();
+        commodity_container.fetchNewCommodities("/commodity/get?type=" + type)
       })
     }
   }

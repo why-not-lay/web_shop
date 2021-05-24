@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>订单支付</title>
+    <link rel="stylesheet" href="/css/order.css">
+  </head>
+  <body>
+    <div id="order_container">
+      <div id="order_body">
+        <div id="order_top"><h2>订单确认</h2></div>
+        <div id="order_main">
+          <div class="order_head">
+            <div class="order_commodity">商品</div>
+            <div class="order_price">单价</div>
+            <div class="order_number">数量</div>
+            <div class="order_sum">小计</div>
+          </div>
+
+          <div id="order_items_outer">
+            <div id="order_items">
+              <div class="order_item" th:each="commodity :${order}">
+                <div class="order_commodity">
+                  <div class="order_goods">
+                    <div class="order_goods_pic"><img src="" ></div>
+                    <div class="order_goods_name" th:text="${commodity.name}">shop1</div>
+                  </div>
+                </div>
+                <div class="order_price" th:text="${commodity.price}">单价</div>
+                <div class="order_number" th:text="${commodity.curNumber}">数量</div>
+                <div class="order_sum" th:text="${commodity.curNumber * commodity.price}">小计</div>
+              </div>
+
+            </div>
+
+          </div>
+        </div>
+        <div id="order_bottom">
+          <div id="order_total">
+            <span style="font-size: 23px;">总金额: </span>
+            <span style="font-size: 20px;" th:text="${total}">0</span>
+          </div>
+          <div id="order_bottom_func">
+            <button id="order_bottom_buy">支付订单</button>
+            <button id="order_bottom_cancel">取消订单</button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div id="footer">
+
+    </div>
+
+    <div id="confirm_order">
+      <div id="qrcode_container">
+        <div id="qrcode"></div>
+        <div id="confirm_buy">
+          <a href="/user/finishTrade" >已支付订单</a>
+        </div>
+
+      </div>
+
+
+    </div>
+  </body>
+  <script src="/lib/qrcode.min.js"></script>
+  <script>
+    var ele_qrcode = new QRCode(document.getElementById('qrcode'),{
+      text:"hello wordl",
+      colorDark:"#2f3542"
+    });
+document.getElementById('order_bottom_buy').onclick = ()=>{
+  document.getElementById('confirm_order').style.display = "block";
+}
+document.getElementById('order_bottom_cancel').onclick = ()=>{
+  window.location.assign("/");
+}
+
+  </script>
+</html>
