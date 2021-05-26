@@ -3,13 +3,6 @@ class CommodityContainer {
     this.ele_container = container;
     this.shoppincart_container = shoppincart_container;
     this.type = 1;
-    //this.addCommodity({
-    //  "cid":"123",
-    //  "name":"commodity1",
-    //  "desc":"this is the description for the commodity1",
-    //  "price":888888,
-    //  "pic":"https://gimg2.baidu.com/image_search/src=http%3A%2F%2Fpic13.nipic.com%2F20110420%2F2531170_133355088479_2.jpg&refer=http%3A%2F%2Fpic13.nipic.com&app=2002&size=f9999,10000&q=a80&n=0&g=0n&fmt=jpeg?sec=1624176549&t=250eb18554f5360712d6b50e01acd95b"
-    //});
     this.fetchNewCommodities("/commodity/get");
     this.ele_container.addEventListener('click',(e)=>{
       var ele_target = e.target;

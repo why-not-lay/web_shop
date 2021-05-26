@@ -1,0 +1,101 @@
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <title>卖家主页</title>
+    <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
+    <link rel="stylesheet" href="../static/css/sidebar.css">
+    <link rel="stylesheet" href="../static/css/seller_main.css">
+    <link rel="stylesheet" href="../static/css/seller_main_commodity_managerment.css">
+    <link rel="stylesheet" href="../static/css/seller_main_commodity_log.css">
+  </head>
+  <body>
+    <div id="sidebar">
+      <div id="top_container">
+        <div id="photo"></div>
+        <div id="name">seller</div>
+      </div>
+      <div id="body_container">
+        <div class="body_item" id="item_selected">商品管理</div>
+        <div class="body_item">日志记录</div>
+      </div>
+    </div>
+    <div id="main">
+      <div id="main_commodity_management">
+        <div class="main_top_container">
+          <h1>商品管理</h1>
+        </div>
+        <div class="commodity_item" id="commodity_head">
+          <div class="commodity_name">商品</div>
+          <div class="commodity_price">单价</div>
+          <div class="commodity_number">数量</div>
+          <div class="commodity_type">种类</div>
+          <div class="commodity_status">状态</div>
+          <div class="commodity_func">操作</div>
+        </div>
+        <div id="main_body_container">
+          <div id="main_body_items">
+
+          </div>
+          <div id="main_page_container">
+            <div id="main_page_left" class="main_page"><div></div></div>
+            <div id="main_page_right" class="main_page"><div></div></div>
+            <div id="main_page_create">
+              新建商品
+            </div>
+          </div>
+        </div>
+        <div  id="create_container" class="flow_container">
+          <div id="create_title">
+            <h2>新建商品</h2>
+          </div>
+          <div id="create_main">
+            <div id="create_pic_container">
+              <img src="#" />
+            </div>
+            <div id="create_desc_container">
+              <div class="create_desc_item" id="create_desc_name">
+                商品名：
+                <input type="text">
+              </div>
+              <div class="create_desc_item" id="create_desc_price">
+                价格：
+                <input type="number" value="0">
+              </div>
+              <div class="create_desc_item" id="create_desc_number">
+                数量：
+                <input type="number" value="0">
+              </div>
+              <div class="create_desc_item" id="create_desc_type">
+                种类：
+                <select name="" id="">
+                  <option value="0">未分类</option>
+                  <option value="1">衣</option>
+                  <option value="2">食</option>
+                  <option value="3">住</option>
+                  <option value="4">行</option>
+                  <option value="5">用</option>
+                </select>
+              </div>
+              <div class="create_desc_item" id="create_desc_description">
+                商品描述：
+                <textarea name="" id="" ></textarea>
+              </div>
+            </div>
+          </div>
+          <div id="create_func_container">
+            <div class="create_func"><button>取消</button></div>
+            <div class="create_func"><button>保存</button></div>
+          </div>
+        </div>
+      </div>
+
+      <div id="main_commodity_log">
+        <div class="main_top_container">
+          <h1>购买记录</h1>
+        </div>
+      </div>
+    </div>
+  </body>
+  <script src="../static/js/tool.js"></script>
+  <script src="../static/js/seller_commodity.js"></script>
+  <script src="../static/js/seller_main.js"></script>
+</html>

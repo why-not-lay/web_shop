@@ -1,0 +1,254 @@
+#main_commodity_management{
+  display: none;
+}
+#commodity_head .commodity_func{
+  display:block;
+  color:black;
+  border-left:none;
+  border-right:none;
+}
+#commodity_head{
+  border-bottom: 2px solid black;
+}
+#main_body_items{
+  height:680px;
+  width:1340px;
+  margin-left:auto;
+  margin-right:auto;
+  overflow-y:auto;
+
+}
+.commodity_item{
+  margin: auto;
+  margin-top:15px;
+  height:50px;
+  width:1320px;
+  font-size:20px;
+  line-height:50px;
+  text-align:center;
+}
+#commodity_selected{
+  background-color:#dfe4ea;
+}
+#commodity_head:hover{
+  background-color:#f1f2f6;
+}
+.commodity_item:hover{
+  background-color:#dfe4ea;
+}
+.commodity_name{
+  float:left;
+  width:200px;
+}
+.commodity_price{
+  float:left;
+  width:200px;
+}
+.commodity_name input, .commodity_price input{
+  height: 40px;
+  width:100px;
+  margin-top:5px;
+  border:none;
+  font-size:20px;
+  text-align:center;
+  background-color:transparent;
+}
+.commodity_name input:focus, .commodity_price input:focus{
+  background-color:#fff;
+}
+.commodity_number{
+  float:left;
+  width:200px;
+}
+.commodity_number_container{
+  width:150px;
+  height:50px;
+  margin-top:10px;
+  margin-left:auto;
+  margin-right:auto;
+}
+.commodity_number_container input{
+  display: inline-block;
+  height: 30px;
+  width:40%;
+  text-align:center;
+  font-size:18px;
+}
+.commodity_number_container input::-webkit-inner-spin-button,
+.commodity_price input::-webkit-inner-spin-button
+{
+  -webkit-appearance:none;
+}
+.btn_num_plus,.btn_num_minus{
+  display: inline-block;
+  width:30px;
+  height:30px;
+  padding:0;
+
+}
+.btn_num_minus > i::before{
+  content: "-";
+}
+.btn_num_plus > i::before{
+  content: "+";
+}
+.commodity_type{
+  float:left;
+  width:200px;
+  height:100%;
+}
+.commodity_status{
+  float:left;
+  width:200px;
+  height:100%;
+}
+.commodity_status select, .commodity_type select{
+  height:40px;
+  margin-top:5px;
+  font-size:20px;
+}
+option{
+  text-align:center;
+}
+.commodity_func{
+  float:left;
+  width:300px;
+  display:flex;
+  border-left: 2px solid black;
+  border-right:2px solid black;
+  color:gray;
+}
+.commodity_func_item{
+  width:100%;
+  cursor: pointer;
+}
+.commodity_func_item:hover{
+  color:#000;
+}
+
+#main_page_container{
+  width:1300px;
+  height:50px;
+  margin:auto;
+  border-top: 2px solid #000;
+  padding-top: 5px;
+}
+.main_page{
+  width: 150px;
+  height: 100%;
+  border: 1px solid #000;
+  cursor: pointer;
+}
+.main_page:hover{
+}
+#main_page_left{
+  float: left;
+}
+#main_page_right{
+  float: right;
+}
+#main_page_left div, #main_page_right div{
+  width:20px;
+  height:20px;
+  margin:auto;
+}
+#main_page_left div{
+  border-left:2px solid #000;
+  border-top:2px solid #000;
+  transform: translateY(15px) rotate(-45deg);
+}
+#main_page_right div{
+  border-right:2px solid #000;
+  border-top:2px solid #000;
+  transform: translateY(15px) rotate(45deg);
+}
+#main_page_create{
+  height:100%;
+  margin-left:160px;
+  margin-right:160px;
+  border:1px solid #000;
+  font-size:20px;
+  text-align:center;
+  line-height: 50px;
+  cursor: pointer;
+}
+
+#create_container{
+  display:none;
+  width:600px;
+  position: fixed;
+  top:50%;
+  left:50%;
+  transform: translateY(-50%) translateX(-50%);
+  padding:25px;
+  background-color:white;
+  border-radius:10px;
+  border: 1px solid #000;
+}
+#create_title{
+  text-align:center;
+  margin-bottom:10px;
+}
+#create_main{
+  width:100%;
+  display:flex;
+}
+#create_pic_container{
+  width:300px;
+  height:400px;
+  border: 1px solid #000;
+}
+#create_pic_container img{
+  max-width: 100%;
+  max-height:100%;
+}
+#create_desc_container{
+  margin-left:10px;
+}
+.create_desc_item{
+  height:50px;
+  margin-bottom:10px;
+  font-size:20px;
+  line-height:50px;
+}
+.create_desc_item input{
+  float: right;
+  width:230px;
+  margin-top:10px;
+  text-align:center;
+  font-size:18px;
+  border-top:none;
+  border-left:none;
+  border-right:none;
+}
+.create_desc_item input:focus{
+  outline:none;
+}
+.create_desc_item input::-webkit-inner-spin-button
+{
+  -webkit-appearance:none;
+}
+.create_desc_item select{
+  float: right;
+  margin-top:10px;
+  width:200px;
+  font-size:20px;
+}
+.create_desc_item textarea{
+  width:100%;
+  height: 110px;
+  padding:5px;
+  font-size:18px;
+  resize:none;
+}
+
+#create_func_container{
+  float:right;
+  display:flex;
+}
+.create_func button{
+  width:100px;
+  height:50px;
+  margin:5px 10px;
+}
+
