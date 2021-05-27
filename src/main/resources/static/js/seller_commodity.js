@@ -1,6 +1,7 @@
 class SellerCommodity{
   constructor(container){
-    this.ele_container = container;
+    this.container = container;
+    this.items_container = this.container.getElementsByClassName('main_items')[0];
     for(var i = 0; i < 10; i++){
       this.addItem({
         "cid":"123",
@@ -14,8 +15,67 @@ class SellerCommodity{
     }
   }
 
+  initPgeeEvent(){
+    var left = this.container.getElementsByClassName('main_page_left')[0];
+    var right = this.container.getElementsByClassName('main_page_right')[0];
+    // TODO:  <27-05-21, yourname> //
+  }
+
+  initCommodityDetailEvent(){
+    this.container.getElementsByClassName('main_page_center')[0].addEventListener('click',()=>{
+      this.commodity_detail_container.setEditable(true);
+      this.commodity_detail_container.setValue({
+        "title":"新建商品",
+        "name":"",
+        "price":"",
+        "number":"",
+        "type":"",
+        "desc":""
+      })
+      this.commodity_detail_container.displayContainer();
+    })
+    this.items_container.addEventListener('click',(e)=>{
+      var ele_target = e.target;
+      var ele_item = e.path[2];
+      if(ele_target.getAttribute('class') === "commodity_func_item commodity_setting"){
+        this.commodity_detail_container.setEditable(true);
+        this.commodity_detail_container.setValue({
+          "title":"商品详情",
+          "name":ele_item.getElementsByTagName('input')[0].value,
+          "price":ele_item.getElementsByTagName('input')[1].value,
+          "number":ele_item.getElementsByTagName('input')[2].value,
+          "type":ele_item.getElementsByTagName('select')[0].value,
+          "desc":ele_item.getElementsByTagName('input')[3].value
+        })
+        this.commodity_detail_container.displayContainer();
+      }
+    })
+  }
+
+  setCommodityDetailContainer(container){
+    this.commodity_detail_container = container;
+    this.initCommodityDetailEvent();
+  }
+
+  setCloseContainer(is_close){
+    if(is_close){
+      this.container.style.display = "none";
+    }
+    else{
+      this.container.style.display = "block";
+    }
+  }
+
+  closeContainer(){
+    this.setCloseContainer(true);
+  }
+
+  displayContainer(){
+    this.setCloseContainer(false);
+  }
+
   clearAllItems(){
-    var items = ele.getElementsByClassName('commodity_item');
+    var items = item_container.getElementsByClassName('commodity_item');
     for(let item of items){
       item.remove();
     }
@@ -23,7 +83,7 @@ class SellerCommodity{
 
   addItem(commodity_data){
     var item = this.createItem(commodity_data);
-    this.ele_container.append(item);
+    this.items_container.append(item);
   }
 
   createItem(commodity_data){
@@ -46,7 +106,7 @@ class SellerCommodity{
 
     ele.setAttribute('cid',commodity_cid);
     var ele_input = ele.getElementsByTagName('input');
-    console.log(ele_input);
+    //console.log(ele_input);
     ele_input[0].value = commodity_name;
     ele_input[1].value = commodity_price;
     ele_input[2].value = commodity_number;
@@ -159,6 +219,11 @@ class SellerCommodity{
     select.append(option);
     commodity_status.append(select);
 
+    var commodity_description = createClassEle('div','commodity_description');
+    var input = document.createElement('input');
+    input.setAttribute('type','hidden');
+    commodity_description.append(input);
+
     var commodity_func = createClassEle('div','commodity_func');
     var func_item = createClassEle('div','commodity_func_item commodity_setting');
     func_item.innerText = "设置";
@@ -175,6 +240,7 @@ class SellerCommodity{
     item_container.append(commodity_number);
     item_container.append(commodity_type);
     item_container.append(commodity_status);
+    item_container.append(commodity_description);
     item_container.append(commodity_func);
     return item_container;
   }

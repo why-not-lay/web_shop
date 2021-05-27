@@ -5,7 +5,7 @@
     <link rel="stylesheet" href="../static/css/sidebar.css">
     <link rel="stylesheet" href="../static/css/seller_main.css">
     <link rel="stylesheet" href="../static/css/seller_main_commodity_managerment.css">
-    <link rel="stylesheet" href="../static/css/seller_main_commodity_log.css">
+    <link rel="stylesheet" href="../static/css/seller_main_commodity_record.css">
   </head>
   <body>
     <div id="sidebar">
@@ -15,7 +15,8 @@
       </div>
       <div id="body_container">
         <div class="body_item" id="item_selected">商品管理</div>
-        <div class="body_item">日志记录</div>
+        <div class="body_item">销售记录</div>
+        <div class="body_item">浏览记录</div>
       </div>
     </div>
     <div id="main">
@@ -32,70 +33,109 @@
           <div class="commodity_func">操作</div>
         </div>
         <div id="main_body_container">
-          <div id="main_body_items">
+          <div id="main_body_items" class="main_items">
 
           </div>
-          <div id="main_page_container">
-            <div id="main_page_left" class="main_page"><div></div></div>
-            <div id="main_page_right" class="main_page"><div></div></div>
-            <div id="main_page_create">
+          <div class="main_page_container">
+            <div class="main_page_left main_page" ><div></div></div>
+            <div class="main_page_right main_page" ><div></div></div>
+            <div class="main_page_center">
               新建商品
             </div>
           </div>
         </div>
-        <div  id="create_container" class="flow_container">
-          <div id="create_title">
-            <h2>新建商品</h2>
-          </div>
-          <div id="create_main">
-            <div id="create_pic_container">
-              <img src="#" />
-            </div>
-            <div id="create_desc_container">
-              <div class="create_desc_item" id="create_desc_name">
-                商品名：
-                <input type="text">
-              </div>
-              <div class="create_desc_item" id="create_desc_price">
-                价格：
-                <input type="number" value="0">
-              </div>
-              <div class="create_desc_item" id="create_desc_number">
-                数量：
-                <input type="number" value="0">
-              </div>
-              <div class="create_desc_item" id="create_desc_type">
-                种类：
-                <select name="" id="">
-                  <option value="0">未分类</option>
-                  <option value="1">衣</option>
-                  <option value="2">食</option>
-                  <option value="3">住</option>
-                  <option value="4">行</option>
-                  <option value="5">用</option>
-                </select>
-              </div>
-              <div class="create_desc_item" id="create_desc_description">
-                商品描述：
-                <textarea name="" id="" ></textarea>
-              </div>
-            </div>
-          </div>
-          <div id="create_func_container">
-            <div class="create_func"><button>取消</button></div>
-            <div class="create_func"><button>保存</button></div>
-          </div>
-        </div>
       </div>
-
-      <div id="main_commodity_log">
+      <div id="main_commodity_trade">
         <div class="main_top_container">
           <h1>购买记录</h1>
         </div>
+        <div class="main_head main_item" >
+          <div class="main_head_item main_commodity">商品名</div>
+          <div class="main_head_item main_user">用户名</div>
+          <div class="main_head_item main_price">单价</div>
+          <div class="main_head_item main_number">数量</div>
+          <div class="main_head_item main_total">总价</div>
+        </div>
+        <div class="main_items">
+        </div>
+        <div class="main_page_container">
+          <div class="main_page_left main_page" ><div></div></div>
+          <div class="main_page_right main_page" ><div></div></div>
+          <div class="main_page_center">
+          </div>
+        </div>
+
+      </div>
+
+      <div id="main_commodity_view">
+        <div class="main_top_container">
+          <h1>浏览记录</h1>
+        </div>
+        <div class="main_head main_item" >
+          <div class="main_head_item main_commodity">商品名</div>
+          <div class="main_head_item main_user">用户名</div>
+          <div class="main_head_item main_start_time">开始时间</div>
+          <div class="main_head_item main_leave_time">离开时间</div>
+          <div class="main_head_item main_duration">持续时间(秒)</div>
+        </div>
+        <div class="main_items">
+        </div>
+        <div class="main_page_container">
+          <div class="main_page_left main_page" ><div></div></div>
+          <div class="main_page_right main_page" ><div></div></div>
+          <div class="main_page_center">
+          </div>
+        </div>
+      </div>
+    </div>
+    <div  id="create_container" class="flow_container">
+      <div id="create_title">
+        <h2>新建商品</h2>
+      </div>
+      <div id="create_main">
+        <div id="create_pic_container">
+          <img src="#" />
+        </div>
+        <div id="create_desc_container">
+          <div class="create_desc_item" id="create_desc_name">
+            商品名：
+            <input type="text">
+          </div>
+          <div class="create_desc_item" id="create_desc_price">
+            价格：
+            <input type="number" value="0">
+          </div>
+          <div class="create_desc_item" id="create_desc_number">
+            数量：
+            <input type="number" value="0">
+          </div>
+          <div class="create_desc_item" id="create_desc_type">
+            种类：
+            <select name="" id="">
+              <option value="0">未分类</option>
+              <option value="1">衣</option>
+              <option value="2">食</option>
+              <option value="3">住</option>
+              <option value="4">行</option>
+              <option value="5">用</option>
+            </select>
+          </div>
+          <div class="create_desc_item" id="create_desc_description">
+            商品描述：
+            <textarea name="" id="" ></textarea>
+          </div>
+        </div>
+      </div>
+      <div id="create_func_container">
+        <div class="create_func"><button>取消</button></div>
+        <div class="create_func"><button>保存</button></div>
       </div>
     </div>
   </body>
   <script src="../static/js/tool.js"></script>
   <script src="../static/js/seller_commodity.js"></script>
+  <script src="../static/js/seller_commodity_view.js"></script>
+  <script src="../static/js/seller_commodity_trade.js"></script>
+  <script src="../static/js/commodity_detail.js"></script>
   <script src="../static/js/seller_main.js"></script>
 </html>

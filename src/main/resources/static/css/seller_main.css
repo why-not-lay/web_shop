@@ -14,3 +14,50 @@ body{
   border-bottom: 2px solid #2f3542;
   text-align:center;
 }
+
+.main_page_container{
+  width:1300px;
+  height:50px;
+  margin:auto;
+  border-top: 2px solid #000;
+  padding-top: 5px;
+}
+.main_page{
+  width: 150px;
+  height: 100%;
+  border: 1px solid #000;
+  cursor: pointer;
+}
+.main_page:hover{
+}
+.main_page_left{
+  float: left;
+}
+.main_page_right{
+  float: right;
+}
+.main_page_left div, .main_page_right div{
+  width:20px;
+  height:20px;
+  margin:auto;
+}
+.main_page_left div{
+  border-left:2px solid #000;
+  border-top:2px solid #000;
+  transform: translateY(15px) rotate(-45deg);
+}
+.main_page_right div{
+  border-right:2px solid #000;
+  border-top:2px solid #000;
+  transform: translateY(15px) rotate(45deg);
+}
+.main_page_center{
+  height:100%;
+  margin-left:160px;
+  margin-right:160px;
+  border:1px solid #000;
+  font-size:20px;
+  text-align:center;
+  line-height: 50px;
+  cursor: pointer;
+}
