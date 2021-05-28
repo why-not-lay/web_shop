@@ -3,140 +3,125 @@
     <title>管理员主页</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <link rel="stylesheet" href="../static/css/sidebar.css">
-    <link rel="stylesheet" href="../static/css/seller_main.css">
-    <link rel="stylesheet" href="../static/css/seller_main_commodity_managerment.css">
-    <link rel="stylesheet" href="../static/css/seller_main_commodity_record.css">
+    <link rel="stylesheet" href="../static/css/admin_main.css">
+    <link rel="stylesheet" href="../static/css/admin_main_seller_managerment.css">
+    <link rel="stylesheet" href="../static/css/admin_main_commodity_statistic.css">
+    <link rel="stylesheet" href="../static/css/admin_main_grade_container.css">
   </head>
   <body>
     <div id="sidebar">
       <div id="top_container">
         <div id="photo"></div>
-        <div id="name">seller</div>
+        <div id="name">admin</div>
       </div>
       <div id="body_container">
         <div class="body_item" id="item_selected">人员管理</div>
-        <div class="body_item">销售记录</div>
-        <div class="body_item">浏览记录</div>
-        <div class="body_item">浏览记录</div>
+        <div class="body_item">商品统计</div>
       </div>
     </div>
     <div id="main">
-      <div id="main_commodity_management">
+      <div id="main_seller_managerment">
         <div class="main_top_container">
-          <h1>商品管理</h1>
-        </div>
-        <div class="commodity_item" id="commodity_head">
-          <div class="commodity_name">商品</div>
-          <div class="commodity_price">单价</div>
-          <div class="commodity_number">数量</div>
-          <div class="commodity_type">种类</div>
-          <div class="commodity_status">状态</div>
-          <div class="commodity_func">操作</div>
+          <h1>人员管理</h1>
         </div>
         <div id="main_body_container">
-          <div id="main_body_items" class="main_items">
+          <div id="main_body_items" class="main_seller_items">
+            <div class="main_seller_item">
+              <div id="main_seller_add_seller">
+                <div></div>
+              </div>
+            </div>
+            <div class="main_seller_item">
+              <div class="main_seller_photo"></div>
+              <div class="main_seller_name">seller1</div>
+              <div class="main_seller_func">
+                <div class="main_seller_grade">业绩</div>
+                <div class="main_seller_reset">重置</div>
+                <div class="main_seller_remove">删除</div>
+              </div>
+            </div>
 
           </div>
-          <div class="main_page_container">
-            <div class="main_page_left main_page" ><div></div></div>
-            <div class="main_page_right main_page" ><div></div></div>
-            <div class="main_page_center">
-              新建商品
+
+        </div>
+      </div>
+      <div id="main_commodity_statistic">
+        <div class="main_top_container">
+          <h1>商品统计</h1>
+        </div>
+        <div class="main_seller_grade_head" >
+          <div class="main_seller_grade_name">商品名</div>
+          <div class="main_seller_grade_seller">销售员</div>
+          <div class="main_seller_grade_sold_number">卖出数量</div>
+          <div class="main_seller_grade_cur_price">当前价格</div>
+          <div class="main_seller_grade_cur_number">当前库存</div>
+          <div class="main_seller_grade_status">当前状态</div>
+          <div class="main_seller_grade_income">收入</div>
+        </div>
+        <div class="main_items">
+        </div>
+        <div class="main_page_container">
+          <div class="main_page_left main_page" ><div></div></div>
+          <div class="main_page_right main_page" ><div></div></div>
+          <div class="main_page_center">
+          </div>
+        </div>
+
+      </div>
+      <div id="main_seller_grade_contaner">
+        <button id="main_seller_close">x</button>
+        <div class="main_seller_grade_head">
+          <div class="main_seller_grade_name">商品名</div>
+          <div class="main_seller_grade_sold_number">卖出数量</div>
+          <div class="main_seller_grade_cur_price">当前价格</div>
+          <div class="main_seller_grade_cur_number">当前库存</div>
+          <div class="main_seller_grade_status">当前状态</div>
+          <div class="main_seller_grade_income">收入</div>
+        </div>
+        <div class="main_seller_grade_items">
+        </div>
+        <div class="main_seller_grade_bottom">
+          <div class="main_seller_grade_total_income">
+            <span>总收入：</span>
+            <span>0</span>
+          </div>
+        </div>
+      </div>
+
+      <div id="main_seller_create">
+        <h2>创建销售员</h2>
+        <div id="main_seller_create_info">
+          <div id="main_seller_create_photo">
+
+          </div>
+          <div id="main_seller_create_desc">
+            <div class="main_seller_create_name main_seller_create_item">
+              用户名：
+              <input type="text">
+            </div>
+            <div class="main_seller_create_passowrd main_seller_create_item">
+              密码：
+              <input type="password">
+            </div>
+            <div class="main_seller_create_passowrd_confirm main_seller_create_item">
+              确认密码：
+              <input type="password">
+            </div>
+            <div id="main_seller_create_func">
+              <button>取消</button>
+              <button>创建</button>
             </div>
           </div>
-        </div>
-      </div>
-      <div id="main_commodity_trade">
-        <div class="main_top_container">
-          <h1>购买记录</h1>
-        </div>
-        <div class="main_head main_item" >
-          <div class="main_head_item main_commodity">商品名</div>
-          <div class="main_head_item main_user">用户名</div>
-          <div class="main_head_item main_price">单价</div>
-          <div class="main_head_item main_number">数量</div>
-          <div class="main_head_item main_total">总价</div>
-        </div>
-        <div class="main_items">
-        </div>
-        <div class="main_page_container">
-          <div class="main_page_left main_page" ><div></div></div>
-          <div class="main_page_right main_page" ><div></div></div>
-          <div class="main_page_center">
-          </div>
-        </div>
 
+        </div>
       </div>
 
-      <div id="main_commodity_view">
-        <div class="main_top_container">
-          <h1>浏览记录</h1>
-        </div>
-        <div class="main_head main_item" >
-          <div class="main_head_item main_commodity">商品名</div>
-          <div class="main_head_item main_user">用户名</div>
-          <div class="main_head_item main_start_time">开始时间</div>
-          <div class="main_head_item main_leave_time">离开时间</div>
-          <div class="main_head_item main_duration">持续时间(秒)</div>
-        </div>
-        <div class="main_items">
-        </div>
-        <div class="main_page_container">
-          <div class="main_page_left main_page" ><div></div></div>
-          <div class="main_page_right main_page" ><div></div></div>
-          <div class="main_page_center">
-          </div>
-        </div>
-      </div>
-    </div>
-    <div  id="create_container" class="flow_container">
-      <div id="create_title">
-        <h2>新建商品</h2>
-      </div>
-      <div id="create_main">
-        <div id="create_pic_container">
-          <img src="#" />
-        </div>
-        <div id="create_desc_container">
-          <div class="create_desc_item" id="create_desc_name">
-            商品名：
-            <input type="text">
-          </div>
-          <div class="create_desc_item" id="create_desc_price">
-            价格：
-            <input type="number" value="0">
-          </div>
-          <div class="create_desc_item" id="create_desc_number">
-            数量：
-            <input type="number" value="0">
-          </div>
-          <div class="create_desc_item" id="create_desc_type">
-            种类：
-            <select name="" id="">
-              <option value="0">未分类</option>
-              <option value="1">衣</option>
-              <option value="2">食</option>
-              <option value="3">住</option>
-              <option value="4">行</option>
-              <option value="5">用</option>
-            </select>
-          </div>
-          <div class="create_desc_item" id="create_desc_description">
-            商品描述：
-            <textarea name="" id="" ></textarea>
-          </div>
-        </div>
-      </div>
-      <div id="create_func_container">
-        <div class="create_func"><button>取消</button></div>
-        <div class="create_func"><button>保存</button></div>
-      </div>
     </div>
   </body>
   <script src="../static/js/tool.js"></script>
-  <script src="../static/js/seller_commodity.js"></script>
-  <script src="../static/js/seller_commodity_view.js"></script>
-  <script src="../static/js/seller_commodity_trade.js"></script>
-  <script src="../static/js/commodity_detail.js"></script>
-  <script src="../static/js/seller_main.js"></script>
+  <script src="../static/js/admin_grade_container.js"></script>
+  <script src="../static/js/admin_seller_container.js"></script>
+  <script src="../static/js/admin_seller_managerment.js"></script>
+  <script src="../static/js/admin_commodity_statistic.js"></script>
+  <script src="../static/js/admin_main.js"></script>
 </html>

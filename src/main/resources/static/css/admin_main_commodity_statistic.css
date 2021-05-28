@@ -1,0 +1,14 @@
+#main_commodity_statistic{
+  display: none;
+}
+.main_seller_grade_seller{
+  width:150px;
+}
+#main_commodity_statistic .main_items{
+  height:450px;
+  overflow-y:auto;
+}
+.main_items .main_seller_grade_item:hover{
+  background-color:#dfe4ea;
+}
+

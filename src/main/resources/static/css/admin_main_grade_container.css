@@ -1,0 +1,65 @@
+#main_seller_grade_contaner{
+  display: none;
+  width:950px;
+  max-height:500px;
+  top:20%;
+  left:30%;
+  padding:10px;
+  position: fixed;
+  background-color: #fff;
+  border-radius:10px;
+  border:1px solid #000;
+}
+.main_seller_grade_head{
+  border-bottom: 1px solid #000;
+}
+.main_seller_grade_items{
+  max-height: 400px;
+  overflow-y:auto;
+  border-bottom: 1px solid #000;
+}
+.main_seller_grade_items .main_seller_grade_item:hover{
+  background-color:#dfe4ea;
+}
+.main_seller_grade_head, .main_seller_grade_item{
+  width:900px;
+  height:35px;
+  margin:auto;
+  margin-top:10px;
+  display:flex;
+  text-align:center;
+  font-size:20px;
+  line-height:35px;
+}
+.main_seller_grade_name{
+  width:150px;
+}
+.main_seller_grade_sold_number{
+  width:150px;
+}
+.main_seller_grade_cur_price{
+  width:150px;
+}
+.main_seller_grade_cur_number{
+  width:150px;
+}
+.main_seller_grade_status{
+  width:150px;
+}
+.main_seller_grade_income{
+  width:150px;
+}
+.main_seller_grade_total_income{
+  float:right;
+  margin-right:25px;
+  font-size:25px;
+}
+#main_seller_close{
+  position: absolute;
+  width:30px;
+  height:30px;
+  top:10px;
+  right:10px;
+  background-color:#fff;
+  font-size:18px;
+}

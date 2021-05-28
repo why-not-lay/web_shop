@@ -1,0 +1,125 @@
+#main_seller_managerment{
+  width:1000px;
+  margin:auto;
+}
+.main_seller_items{
+  display:flex;
+  flex-wrap:wrap;
+  max-height:800px;
+  overflow-y:auto;
+  border-bottom: 2px solid #000;
+}
+.main_seller_item{
+  width:200px;
+  padding:10px;
+  margin:10px;
+  background-color:#fff;
+  border-radius:20px;
+  font-size:20px;
+  text-align:center;
+}
+.main_seller_item:hover{
+  box-shadow: 0 3px rgba(0,0,0,0.2);
+  transition: box-shadow 0.5s;
+}
+.main_seller_photo{
+  width: 120px;
+  height: 120px;
+  margin:auto;
+  margin-top:5px;
+  margin-bottom:5px;
+  background-color:rgba(0,0,0,0.1);
+  border-radius:60px;
+}
+.main_seller_func{
+  border-top: 1px solid #000;
+  color:gray;
+}
+.main_seller_func div{
+  margin:10px;
+  cursor: pointer;
+}
+.main_seller_func div:hover{
+  background-color:#dfe4ea;
+}
+#main_seller_add_seller{
+  position: relative;
+  width:120px;
+  height:120px;
+  margin:auto;
+  margin-top:60px;
+  border-radius:60px;
+  background-color: #a4b0be70;
+  cursor: pointer;
+}
+#main_seller_add_seller div{
+  position: absolute;
+  height: 60px;
+  width:10px;
+  top:50%;
+  left:50%;
+  transform: translateX(-50%) translateY(-50%);
+  border-radius:5px;
+  background-color:#fff;
+}
+#main_seller_add_seller div::after{
+  content:"";
+  position: absolute;
+  height:10px;
+  width:60px;
+  top:50%;
+  left:50%;
+  transform: translateX(-50%) translateY(-50%);
+  border-radius:5px;
+  background-color:#fff;
+}
+
+#main_seller_create{
+  display:none;
+  position: fixed;
+  left:50%;
+  top:50%;
+  transform: translateX(-50%) translateY(-50%);
+  padding:10px;
+  background-color: #fff;
+  border: 1px solid #000;
+  border-radius:10px;
+}
+#main_seller_create h2{
+  margin:10px;
+  text-align:center;
+}
+#main_seller_create_info{
+  display:flex;
+}
+#main_seller_create_photo{
+  width:200px;
+  height:200px;
+  border: 1px solid #000;
+}
+.main_seller_create_item{
+  margin:10px;
+  height:40px;
+  font-size:20px;
+}
+.main_seller_create_item input{
+  float:right;
+  width:200px;
+  font-size:20px;
+  text-align:center;
+  background-color:transparent;
+  border-top:none;
+  border-left:none;
+  border-right:none;
+}
+.main_seller_create_item input:focus{
+  outline:none;
+}
+#main_seller_create_func{
+  float: right;
+  margin-right:10px;
+}
+#main_seller_create_func button{
+  width:50px;
+  font-size:20px;
+}
