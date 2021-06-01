@@ -25,10 +25,13 @@ public class SessionListener implements HttpSessionListener {
     @Override
     public void sessionDestroyed(HttpSessionEvent se) {
         User user = (User)session.getAttribute("user");
-        if(user == null) return;
-        OnlineRecord online = (OnlineRecord)session.getAttribute("online");
-        online.setBeforeLogout(online.getLoginIp(), Util.getDateNow());
-        onlineRecordRepository.save(online);
+        if(user != null) {
+            System.out.println("用户注销");
+            OnlineRecord online = (OnlineRecord)session.getAttribute("online");
+            online.setBeforeLogout(online.getLoginIp(), Util.getDateNow());
+            onlineRecordRepository.save(online);
+
+        }
     }
 
 }

@@ -20,20 +20,18 @@
 
           <div id="order_items_outer">
             <div id="order_items">
-              <div class="order_item" th:each="commodity :${order}">
+              <div class="order_item" th:each="trade :${trades}">
                 <div class="order_commodity">
                   <div class="order_goods">
                     <div class="order_goods_pic"><img src="" ></div>
-                    <div class="order_goods_name" th:text="${commodity.name}">shop1</div>
+                    <div class="order_goods_name" th:text="${trade.name}">shop1</div>
                   </div>
                 </div>
-                <div class="order_price" th:text="${commodity.price}">单价</div>
-                <div class="order_number" th:text="${commodity.curNumber}">数量</div>
-                <div class="order_sum" th:text="${commodity.curNumber * commodity.price}">小计</div>
+                <div class="order_price" th:text="${trade.price}">单价</div>
+                <div class="order_number" th:text="${trade.number}">数量</div>
+                <div class="order_sum" th:text="${trade.number * trade.number}">小计</div>
               </div>
-
             </div>
-
           </div>
         </div>
         <div id="order_bottom">
@@ -74,7 +72,7 @@ document.getElementById('order_bottom_buy').onclick = ()=>{
   document.getElementById('confirm_order').style.display = "block";
 }
 document.getElementById('order_bottom_cancel').onclick = ()=>{
-  window.location.assign("/");
+  window.location.assign("/user/cancelTrade");
 }
 
   </script>

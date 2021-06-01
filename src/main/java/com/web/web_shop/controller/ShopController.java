@@ -45,9 +45,13 @@ public class ShopController {
     @RequestMapping(value = "", method= RequestMethod.GET )
     public String getShopPage() {
         Integer code = Util.isLogin(session);
-        if(code == Constant.UserType.NOT_USER || code == Constant.UserType.USER)
-            return "redirect:/";
-        return "shop_main";
+        if(code == Constant.UserType.NOT_USER  )
+            return "redirect:/shop/certify_shop";
+        if(Constant.UserType.USER)
+            return "redirect:/"
+                   if(code == Constant.UserType.SELLER )
+                       return "seller_main";
+        return "admin_main";
     }
 
     @RequestMapping(value = "/certify", method= RequestMethod.GET )

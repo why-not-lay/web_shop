@@ -179,11 +179,14 @@ public class CommodityController {
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(number));
         User user = (User)session.getAttribute("user");
         Integer commodity_type = Integer.parseInt(type);
+
         if(code == Constant.UserType.SELLER) {
+            //卖家
             Page<Commodity> commodities_container = commodityRepository.findByUidAndStatus(user.getUid(), Constant.RecordStatus.EXIST, pageable);
             commodities = commodities_container.getContent();
             data_commodities = Util.tran2DataCommodityList(commodities,null,false);
         } else if(code == Constant.UserType.ADMIN) {
+            //管理员
             List<User> sellers = userRepository.findByParentAndStatus(user.getUid(),Constant.RecordStatus.EXIST);
             data_commodities = new ArrayList<DataCommodity>();
             for(User seller : sellers) {
@@ -195,6 +198,7 @@ public class CommodityController {
                 }
             }
         } else {
+            //用户
             Page<Commodity> commodities_container_onSale = null;
             if(commodity_type == 10) {
                 commodities_container_onSale = commodityRepository.findByStatusAndComStatus(Constant.RecordStatus.EXIST, Constant.CommodityStatus.ON_SALE, pageable);

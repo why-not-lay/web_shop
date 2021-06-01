@@ -9,6 +9,12 @@ public final  class Constant {
         int NG = 404;
     }
 
+    public interface Finished {
+        int WAITING=0;
+        int FINISH=1;
+        int CANCEL=2;
+    }
+
 
     public interface UserType {
         int NOT_USER = 0;
