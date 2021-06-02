@@ -2,21 +2,22 @@
   <head>
     <title>管理员主页</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <link rel="stylesheet" href="../static/css/sidebar.css">
-    <link rel="stylesheet" href="../static/css/admin_main.css">
-    <link rel="stylesheet" href="../static/css/admin_main_seller_managerment.css">
-    <link rel="stylesheet" href="../static/css/admin_main_commodity_statistic.css">
-    <link rel="stylesheet" href="../static/css/admin_main_grade_container.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <link rel="stylesheet" href="/css/admin_main.css">
+    <link rel="stylesheet" href="/css/admin_main_seller_managerment.css">
+    <link rel="stylesheet" href="/css/admin_main_commodity_statistic.css">
+    <link rel="stylesheet" href="/css/admin_main_grade_container.css">
   </head>
   <body>
     <div id="sidebar">
       <div id="top_container">
         <div id="photo"></div>
-        <div id="name">admin</div>
+        <div id="name" th:text="${user.username}">admin</div>
       </div>
       <div id="body_container">
         <div class="body_item" id="item_selected">人员管理</div>
         <div class="body_item">商品统计</div>
+        <div class="body_item">注销</div>
       </div>
     </div>
     <div id="main">
@@ -26,18 +27,9 @@
         </div>
         <div id="main_body_container">
           <div id="main_body_items" class="main_seller_items">
-            <div class="main_seller_item">
+            <div class="main_seller_item" id="man_seller_add_enter">
               <div id="main_seller_add_seller">
                 <div></div>
-              </div>
-            </div>
-            <div class="main_seller_item">
-              <div class="main_seller_photo"></div>
-              <div class="main_seller_name">seller1</div>
-              <div class="main_seller_func">
-                <div class="main_seller_grade">业绩</div>
-                <div class="main_seller_reset">重置</div>
-                <div class="main_seller_remove">删除</div>
               </div>
             </div>
 
@@ -118,10 +110,10 @@
 
     </div>
   </body>
-  <script src="../static/js/tool.js"></script>
-  <script src="../static/js/admin_grade_container.js"></script>
-  <script src="../static/js/admin_seller_container.js"></script>
-  <script src="../static/js/admin_seller_managerment.js"></script>
-  <script src="../static/js/admin_commodity_statistic.js"></script>
-  <script src="../static/js/admin_main.js"></script>
+  <script src="/js/tool.js"></script>
+  <script src="/js/admin_grade_container.js"></script>
+  <script src="/js/admin_seller_container.js"></script>
+  <script src="/js/admin_seller_managerment.js"></script>
+  <script src="/js/admin_commodity_statistic.js"></script>
+  <script src="/js/admin_main.js"></script>
 </html>

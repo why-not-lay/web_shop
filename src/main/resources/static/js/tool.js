@@ -1,6 +1,79 @@
+function getUrlByType(type,operation,params){
+  var url = "";
+  if(type === "commodity"){
+    url += "/commodity";
+  }
+  else if(type === "trade"){
+    url+= "/record/trade";
+  }
+  else if(type === "view"){
+    url+= "/record/view";
+  }
+  else if(type === "shop"){
+    url += "/shop";
+  }
+  else if(type === "search"){
+    url += "/search";
+  }
+
+  if(operation === "get"){
+    url+= "/get";
+  }
+  else if(operation === "seller"){
+    url+= "/seller";
+  }
+  else if(operation === "delete"){
+    url += "/delete";
+  }
+  else if(operation === "update"){
+    url += "/update";
+  }
+  else if(operation === "add"){
+    url += "/add";
+  }
+  else if(operation === "register"){
+    url += "/registerSeller";
+  }
+  else if(operation === "reset"){
+    url += "/reset";
+  }
+  else if(operation === "grade"){
+    url += "/grade";
+  }
+  else if(operation === "deleteSeller"){
+    url += "/deleteSeller";
+  }
+  var suffix = ""
+  if(params){
+    suffix = Object.keys(params).map((key)=>key+"="+params[key]).join("&");
+  }
+  if(suffix){
+    url += "?" + suffix;
+  }
+  return url;
+}
 async function getJSON(url) {
   try {
     let response = await fetch(url);
+    return await response.json();
+  } catch (error) {
+    console.log('Request Failed', error);
+  }
+}
+
+async function PostJSON(url,data) {
+  var form_data = new FormData();
+  for(let key of Object.keys(data)){
+    form_data.append(key,data[key]);
+  }
+  try {
+    let response = await fetch(url,{
+      method:"POST",
+      //headers:{
+      //  'Content-Type':'application/x-www-form-urlencoded'
+      //},
+      body:form_data
+    });
     return await response.json();
   } catch (error) {
     console.log('Request Failed', error);

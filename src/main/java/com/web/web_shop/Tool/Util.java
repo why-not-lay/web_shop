@@ -10,8 +10,13 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.web.web_shop.beans.User;
-
+import com.web.web_shop.beans.ViewRecord;
 import com.web.web_shop.beans.DataCommodity;
+import com.web.web_shop.beans.DataGrade;
+import com.web.web_shop.beans.DataSeller;
+import com.web.web_shop.beans.DataTrade;
+import com.web.web_shop.beans.DataView;
+import com.web.web_shop.beans.Trade;
 import com.web.web_shop.beans.Commodity;
 
 /**
@@ -48,10 +53,13 @@ public class Util {
     }
 
     public static String getDateNow() {
-        String date_str = "";
         Date now = new Date();
+        return tran2StrDate(now);
+    }
+
+    public static String tran2StrDate(Date time) {
         SimpleDateFormat ft = new SimpleDateFormat("yyyy-MM-dd hh:mm:ss");
-        date_str = ft.format(now);
+        String date_str = ft.format(time);
         return date_str;
     }
 
@@ -63,8 +71,8 @@ public class Util {
     }
 
     public static List<DataCommodity> tran2DataCommodityList(List<Commodity> commodities, String seller_name, Boolean for_user) {
-        List<DataCommodity> data_commodities = null;
-        if(commodities == null) return null;
+        List<DataCommodity> data_commodities = new ArrayList<DataCommodity>();
+        if(commodities == null) return data_commodities;
         data_commodities = new ArrayList<DataCommodity>();
         for(Commodity commodity : commodities) {
             DataCommodity data_commodity = tran2DataCommodity(commodity,for_user);
@@ -83,7 +91,6 @@ public class Util {
         data_commodity.setPrice(commodity.getPrice());
         data_commodity.setDescription(commodity.getDescription());
         if(for_user) {
-
             data_commodity.setCom_status(1);
             data_commodity.setTotal_number(0);
             data_commodity.setCur_number(0);
@@ -95,6 +102,57 @@ public class Util {
         }
         return data_commodity;
     }
+
+    public static DataTrade tran2DataTrade(Trade trade, String username) {
+        DataTrade data_trade = new DataTrade();
+        data_trade.setName(trade.getName());
+        data_trade.setUser(username);
+        data_trade.setPrice(trade.getPrice());
+        data_trade.setNumber(trade.getNumber());
+        return data_trade;
+    }
+
+    public static DataSeller tran2DataSeller(User user) {
+        DataSeller data_seller = new DataSeller();
+        data_seller.setUid(user.getUid());
+        data_seller.setName(user.getUsername());
+        return data_seller;
+    }
+
+    public static DataGrade tran2DataGrad(Commodity commodity, Trade trade, String seller_name) {
+        DataGrade data_grade = new DataGrade();
+        data_grade.setName(commodity.getName());
+        data_grade.setCur_price(commodity.getPrice());
+        data_grade.setCur_number(commodity.getCurNumber());
+        data_grade.setSeller_name(seller_name);
+        data_grade.setSold_number(commodity.getTotalNumber() - commodity.getCurNumber());
+        data_grade.setIncome(trade.getTotal());
+        Integer status = commodity.getStatus();
+        if(status == Constant.RecordStatus.DELETED) {
+            data_grade.setStatus("已删除");
+        } else {
+            Integer com_status = commodity.getComStatus();
+            if(com_status == Constant.CommodityStatus.ON_SALE) {
+                data_grade.setStatus("上架");
+            } else if(com_status == Constant.CommodityStatus.OFF_SALE) {
+                data_grade.setStatus("下架");
+            } else {
+                data_grade.setStatus("缺货");
+            }
+        }
+        return data_grade;
+    }
+
+    public static DataView tran2DataView(ViewRecord view, String shopname,String username) {
+        DataView data_view = new DataView();
+        data_view.setName(shopname);
+        data_view.setUser(username);
+        data_view.setStart_time(tran2StrDate(new Date(view.getEnterTimestamp())));
+        data_view.setLeave_time(tran2StrDate(new Date(view.getOutTimestamp())));
+        data_view.setDuration(view.getOutTimestamp() - view.getEnterTimestamp());
+        return data_view;
+    }
+
     public static class Certify {
         public static Boolean isUpperCase(char c) {
             return c >= 'A' && c <= 'Z';

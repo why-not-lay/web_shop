@@ -2,8 +2,19 @@ class CommodityContainer {
   constructor(container,shoppincart_container){
     this.ele_container = container;
     this.shoppincart_container = shoppincart_container;
-    this.type = 1;
-    this.fetchNewCommodities("/commodity/get");
+    this.type = 10;
+    this.page = 0;
+    this.page_num = 10;
+    this.fetchNewCommodities();
+    this.initGlobalEvent();
+  }
+
+  flushCommodities(){
+    this.clearAllCommodity();
+    this.fetchNewCommodities();
+  }
+
+  initGlobalEvent(){
     this.ele_container.addEventListener('click',(e)=>{
       var ele_target = e.target;
       if(ele_target.getAttribute('class') === "commodity_trade_item commodity_trade_item_buy"){
@@ -26,18 +37,22 @@ class CommodityContainer {
       var inner_heght = window.innerHeight;
       if(scroll_top + inner_heght === scroll_height){
         console.log("end");
-        // getCOmmodity:  <22-05-21, yourname> //
+        this.page++;
+        this.fetchNewCommodities();
       }
     }
     var deScrollToEnd = deboune(scrollToEnd,1000);
     window.addEventListener('scroll',deScrollToEnd);
+
   }
 
   setType(type){
     this.type = type;
+    this.flushCommodities();
   }
 
-  fetchNewCommodities(url){
+  fetchNewCommodities(){
+    var url = getUrlByType('commodity','get',{"page":this.page,"number":this.page_num,"type":this.type});
     var promise = getJSON(url);
     promise.then((json)=>{
       if(json['code'] !== 200) return;
@@ -51,15 +66,25 @@ class CommodityContainer {
 
         }
       })
-      for(let commodity of commodities){
-        this.addCommodity(commodity);
+      if(commodities){
+        for(let commodity of commodities){
+          this.addCommodity(commodity);
+        }
+      }
+      else{
+        if(this.page-1){
+          this.page--;
+        }
       }
     })
   }
 
   clearAllCommodity(){
-    for(var ele of this.ele_container.children){
-      ele.remove();
+    var items = this.ele_container.children;
+    var idx = 0, len = items.length;
+    while(idx < len){
+      this.ele_container.removeChild(items[idx]);
+      len--;
     }
   }
 
@@ -124,7 +149,10 @@ class CommodityContainer {
     var btn_buy = ele.getElementsByClassName('commodity_trade_item')[0];
     var btn_shoppingcart = ele.getElementsByClassName('commodity_trade_item')[1];
     btn_buy.addEventListener('click',()=>{
-      // 发送购买订单:  <21-05-21, yourname> //
+      var cid = ele.getAttribute('cid');
+      var number = ele_value.value;
+      docCookies.setItem('order',JSON.stringify([{"c":cid,"n":number}]));
+      window.location.assign("/user/order");
     })
     btn_shoppingcart.addEventListener('click',()=>{
       var number = ele_value.value;

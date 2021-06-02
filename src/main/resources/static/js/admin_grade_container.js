@@ -2,7 +2,56 @@ class GradeContainer{
   constructor(contaner){
     this.container = contaner;
     this.items_container = this.container.getElementsByClassName('main_seller_grade_items')[0];
+    this.parent_container = null;
+    this.binding_item = null;
     this.initEvent();
+  }
+
+  bindItem(parent_container,item){
+    this.parent_container = parent_container;
+    this.binding_item = item;
+  }
+
+  flushItems(){
+    this.clearAllItem();
+    this.fetchNewGrade();
+  }
+
+  clearAllItem(){
+    this.setTotalIncome(0);
+    var items = this.items_container.getElementsByClassName('main_seller_grade_item');
+    var idx = 0, len = items.length;
+    while(idx < len){
+      this.items_container.removeChild(items[idx]);
+      len--;
+    }
+  }
+
+  fetchNewGrade(){
+    var uid = this.binding_item.getAttribute('uid');
+    var url = getUrlByType('shop','grade',{"uid":uid});
+    getJSON(url).then((json)=>{
+      if(json['code'] === 200){
+        var grades = json['data'].map((grade)=>{
+          return {
+            "name":grade['name'],
+            "status":grade['status'],
+            "cur_price":grade['cur_price'],
+            "sold_number":grade['sold_number'],
+            "cur_number":grade['cur_number'],
+            "income":grade['income']
+          }
+        })
+        if(grades){
+          for(let grade of grades){
+            this.addItem(grade);
+          }
+        }
+      }
+      else{
+        console.log("员工业绩获取失败");
+      }
+    })
   }
 
   initEvent(){
@@ -27,6 +76,7 @@ class GradeContainer{
   }
 
   displayContainer(){
+    this.flushItems();
     this.setCloseContainer(false);
   }
 
@@ -53,6 +103,7 @@ class GradeContainer{
 
   initItemValue(ele,data){
     if(!data)return;
+    console.log(data);
     var name = data['name'];
     var sold_number = data['sold_number'];
     var cur_price = data['cur_price'];

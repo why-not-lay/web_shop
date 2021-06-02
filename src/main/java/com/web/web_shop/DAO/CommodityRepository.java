@@ -18,6 +18,7 @@ public interface CommodityRepository extends JpaRepository<Commodity,Long> {
 
     Commodity findByCidAndStatus(Long cid, Integer status);
     Commodity findByCidAndStatusAndComStatus(Long cid, Integer status, Integer com_status);
+    Commodity findByCid(Long cid);
     List<Commodity> findByStatus(Integer status);
 
     Page<Commodity> findByUidAndStatusAndComStatus(Long uid, Integer com_status,Integer status, Pageable pageable);
@@ -27,8 +28,13 @@ public interface CommodityRepository extends JpaRepository<Commodity,Long> {
 
     @Transactional
     @Modifying
-    @Query(value = "update status =?2 from commodity where cid =?1",nativeQuery = true)
+    @Query(value = "update commodity set status =?2 where cid=?1",nativeQuery = true)
     int updateStatusByCid(Long cid, Integer status);
 
+    @Query(value = "select * from commodity where name LIKE CONCAT('%',?1,'%') and status = 0 and com_status = 1", nativeQuery = true)
+    List<Commodity> searchByKey(String key);
+
+    @Query(value = "select * from commodity where name LIKE CONCAT('%',?1,'%') and type = ?2 and status = 0 and com_status = 1", nativeQuery = true)
+    List<Commodity> searchByKeyAndType(String key, Integer type);
 
 }

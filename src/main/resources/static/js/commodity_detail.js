@@ -2,6 +2,13 @@ class CommodityDetail {
   constructor(container){
     this.container = container;
     this.initEvent();
+    this.binding_item = null;
+    this.parent_container = null;
+  }
+
+  bindItem(container, item){
+    this.parent_container = container;
+    this.binding_item = item;
   }
 
   setValue(data){
@@ -9,8 +16,8 @@ class CommodityDetail {
     var name = data['name'];
     var price = data['price'];
     var number = data['number'];
-    var type = data['type']? data['type'] : "0";;
-    var desc = data['desc']
+    var type = data['type']? data['type'] : "0";
+    var desc = data['desc'];
 
     document.getElementById('create_title').getElementsByTagName('h2')[0].innerText = title;
     document.getElementById('create_desc_name').getElementsByTagName('input')[0].value = name;
@@ -21,6 +28,7 @@ class CommodityDetail {
   }
 
   getValue(){
+    var is_new = document.getElementById('create_title').getElementsByTagName('h2')[0].innerText === "新建商品" ? true : false;
     var name = document.getElementById('create_desc_name').getElementsByTagName('input')[0].value;
     var price = document.getElementById('create_desc_price').getElementsByTagName('input')[0].value;
     var number = document.getElementById('create_desc_number').getElementsByTagName('input')[0].value;
@@ -31,7 +39,8 @@ class CommodityDetail {
       "price":price,
       "number":number,
       "type":type,
-      "desc":desc
+      "desc":desc,
+      "is_new":is_new
     }
   }
 
@@ -41,7 +50,35 @@ class CommodityDetail {
       this.closeContainer();
     })
     buttons[1].addEventListener('click',()=>{
-      // 保存商品:  <27-05-21, yourname> //
+      var data = this.getValue();
+      if(data['is_new']){
+        var add_url = getUrlByType("commodity","add");
+        PostJSON(add_url,{
+          "shopname":data['name'],
+          "price":data['price'],
+          "number":data['number'],
+          "type":data['type'],
+          "description":data['desc'],
+        }).then((json)=>{
+          if(json['code'] === 200){
+            console.log(add_url+"商品添加成功");
+            this.parent_container.flushItems();
+          }
+          else{
+            console.log(add_url+"商品添加失败");
+          }
+        })
+      }
+      else{
+        this.parent_container.setItemValue(this.binding_item,{
+          "name":data['name'],
+          'price':data['price'],
+          'number':data['number'],
+          'type':data['type'],
+          'desc':data['desc']
+        })
+      }
+      this.closeContainer();
     })
   }
 

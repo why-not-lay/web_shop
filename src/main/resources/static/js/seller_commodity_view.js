@@ -2,14 +2,79 @@ class CommodityView{
   constructor(container){
     this.container = container;
     this.items_container = this.container.getElementsByClassName('main_items')[0];
-    for(var i = 0; i < 10; i++){
-      this.addItem({
-        "commodity_name":"shop1",
-        "user_name":"user1",
-        "start_time":"2001年02月21日 12时19分16秒",
-        "leave_time":"2001年02月21日 12时19分16秒",
-        "duration":"123"
+    this.page = 0;
+    this.page_num = 10;
+    this.initGlobalEvent();
+  }
+
+  flushItems(){
+    this.clearAllItem();
+    this.fetchNewView();
+  }
+
+  initPageEvent(){
+    var left = this.container.getElementsByClassName('main_page_left')[0];
+    var right = this.container.getElementsByClassName('main_page_right')[0];
+    left.addEventListener('click',()=>{
+      this.decreasePage();
+      this.flushItems();
+    })
+    right.addEventListener('click',()=>{
+      this.increasePage();
+      this.flushItems();
+    })
+  }
+
+
+  initGlobalEvent(){
+    this.initPageEvent();
+  }
+
+  increasePage(){
+    this.page++;
+  }
+  decreasePage(){
+    this.page = this.page - 1 >= 0 ? this.page -1 : 0;
+  }
+
+  fetchNewView(){
+    var url = getUrlByType('view','get',{"page":this.page,"number":this.page_num});
+    getJSON(url).then((json)=>{
+      if(json['code'] !== 200){
+        console.log(url+"获取记录失败");
+        return;
+      }
+      var views = json['data'].map((view)=>{
+        return{
+          "commodity_name":view['name'],
+          "user_name":view['user'],
+          "start_time":view['start_time'],
+          "leave_time":view['leave_time'],
+          "duration":view['duration']
+        }
       })
+      if(views && views.length != 0){
+        this.clearAllItem();
+        for(let view of views){
+          this.addItem(view);
+        }
+      }
+      else{
+        if(this.page > 0){
+          this.decreasePage();
+          this.flushItems();
+        }
+      }
+
+    })
+  }
+
+  clearAllItem(){
+    var items  = this.items_container.getElementsByClassName('main_item');
+    var idx = 0, len = items.length;
+    while(idx < len){
+      this.items_container.removeChild(items[idx]);
+      len--;
     }
   }
 
@@ -52,14 +117,12 @@ class CommodityView{
   }
 
   initItemValue(ele,data){
-    var data_commodity, data_user, data_start_time,
-      data_leave_time, data_duration;
     if(!data) return;
-    data_commodity = data['commodity_name'];
-    data_user = data['user_name'];
-    data_start_time = data['start_time'];
-    data_leave_time = data['leave_time'];
-    data_duration = data['duration'];
+    var data_commodity = data['commodity_name'];
+    var data_user = data['user_name'];
+    var data_start_time = data['start_time'];
+    var data_leave_time = data['leave_time'];
+    var data_duration = data['duration'];
     ele.getElementsByClassName('main_commodity')[0].innerText = data_commodity;
     ele.getElementsByClassName('main_user')[0].innerText = data_user;
     ele.getElementsByClassName('main_start_time')[0].innerText = data_start_time;

@@ -2,15 +2,81 @@ class CommodityTrade{
   constructor(container){
     this.container = container;
     this.items_container = this.container.getElementsByClassName('main_items')[0];
-    for(var i = 0; i < 10; i++){
-      this.addItem({
-        "commodity_name":"shop1",
-        "user_name":"user1",
-        "price":"123",
-        "number":"123",
+    this.page = 0;
+    this.page_num = 10;
+    this.initGlobalEvent();
+  }
+
+  flushItems(){
+    this.clearAllItem();
+    this.fetchNewTrade();
+  }
+
+  initPageEvent(){
+    var left = this.container.getElementsByClassName('main_page_left')[0];
+    var right = this.container.getElementsByClassName('main_page_right')[0];
+    left.addEventListener('click',()=>{
+      this.decreasePage();
+      this.flushItems();
+    })
+    right.addEventListener('click',()=>{
+      this.increasePage();
+      this.flushItems()
+    })
+  }
+
+
+  initGlobalEvent(){
+    this.initPageEvent();
+  }
+
+  increasePage(){
+    this.page++;
+  }
+  decreasePage(){
+    this.page = this.page - 1 >= 0 ? this.page -1 : 0;
+  }
+
+  fetchNewTrade(){
+    var url = getUrlByType('trade','get',{"page":this.page,"number":this.page_num});
+    getJSON(url).then((json)=>{
+      if(json['code'] !== 200){
+        console.log(url+"获取记录失败");
+        return;
+      }
+      var trades = json['data'].map((trade)=>{
+        return{
+          "commodity_name":trade['name'],
+          "user_name":trade['user'],
+          "price":trade['price'],
+          "number":trade['number']
+        }
       })
+      if(trades && trades.length != 0){
+        this.clearAllItem();
+        for(let trade of trades){
+          this.addItem(trade);
+        }
+      }
+      else{
+        if(this.page > 0){
+          this.decreasePage();
+          this.flushItems();
+        }
+      }
+
+    })
+  }
+
+  clearAllItem(){
+    var items  = this.items_container.getElementsByClassName('main_item');
+    var idx = 0, len = items.length;
+    while(idx < len){
+      this.items_container.removeChild(items[idx]);
+      len--;
     }
   }
+
 
   setCommodityDetailContainer(container){
     this.commodity_detail_container = container;
@@ -54,13 +120,11 @@ class CommodityTrade{
   }
 
   initItemValue(ele,data){
-    var data_commodity, data_user, data_price,
-      data_number;
     if(!data) return;
-    data_commodity = data['commodity_name'];
-    data_user = data['user_name'];
-    data_price = data['price'];
-    data_number = data['number'];
+    var data_commodity = data['commodity_name'];
+    var data_user = data['user_name'];
+    var data_price = data['price'];
+    var data_number = data['number'];
     ele.getElementsByClassName('main_commodity')[0].innerText = data_commodity;
     ele.getElementsByClassName('main_user')[0].innerText = data_user;
     ele.getElementsByClassName('main_price')[0].innerText = data_price;

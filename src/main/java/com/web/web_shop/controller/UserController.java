@@ -168,7 +168,7 @@ public class UserController {
         if (code == Constant.UserType.ADMIN || code == Constant.UserType.SELLER)
             return "redirect:/shop/";
         if (code == Constant.UserType.NOT_USER)
-            return "redirect:/";
+            return "redirect:/user/certify";
 
         ObjectMapper mapper = new ObjectMapper();
         CollectionType java_type = mapper.getTypeFactory().constructCollectionType(List.class, DataOrder.class);
@@ -179,10 +179,10 @@ public class UserController {
             e.printStackTrace();
         }
         //DataOrder[] orders = mapper.readValue(order,DataOrder[].class);
-        //for(DataOrder order: orders) {
-        //    System.out.println(order.getCid());
-        //    System.out.println(order.getNumber());
-        //}
+        for(DataOrder order: orders) {
+            System.out.println(order.getCid());
+            System.out.println(order.getNumber());
+        }
 
         List<Commodity> commodities = new ArrayList<Commodity>();
         Integer total = 0;
@@ -199,7 +199,8 @@ public class UserController {
                 Cookie cookie = new Cookie("order",null);
                 cookie.setMaxAge(0);
                 response.addCookie(cookie);
-                return "redirect:/";
+                modelMap.addAttribute("message","商品："+commodity.getName() + "数量不足");
+                return "message";
             }
             //commodity.setCurNumber(order.getNumber());
             order.setName(commodity.getName());
@@ -225,7 +226,8 @@ public class UserController {
             trade.setTotal(order.getPrice() * order.getNumber());
             trade.setFinished(Constant.Finished.WAITING);
             trade.setName(commodity.getName());
-            tradeRepository.save(trade);
+            //tradeRepository.save(trade);
+            //System.out.println(trade.getTid());
             trades.add(trade);
 
             commodity.setCurNumber(commodity.getCurNumber() - order.getNumber());

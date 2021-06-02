@@ -22,6 +22,40 @@
     })
   }
 
+  function initSearchContainer(commodity_container){
+    var container = document.getElementById('search');
+    var input = container.getElementsByTagName('input')[0];
+    var btn = container.getElementsByTagName('button')[0];
+
+    btn.addEventListener('click',()=>{
+      var keyword = input.value;
+      var url = getUrlByType('search',"",{"key":keyword});
+      getJSON(url).then((json)=>{
+        if(json['code'] === 200){
+          var commodities = json['data'].map((commodity)=>{
+            return {
+              "cid":commodity['cid'],
+              "name":commodity['name'],
+              "desc":commodity['description'],
+              "price":commodity['price'],
+              "pic":""
+
+            }
+          })
+          commodity_container.clearAllCommodity();
+          for(let commodity of commodities){
+            commodity_container.addCommodity(commodity);
+          }
+
+        }
+        else{
+          console.log("获取失败",error);
+        }
+      });
+    })
+  }
+
+
 
   window.onload = function() {
     initShoppingcart();
@@ -37,10 +71,12 @@
         ele.setAttribute("id","type_seleted");
         ele_type_cur = ele;
         var type = ele.getAttribute('type');
-        commodity_container.clearAllCommodity();
-        commodity_container.fetchNewCommodities("/commodity/get?type=" + type)
+        commodity_container.setType(Number.parseInt(type));
+        //commodity_container.clearAllCommodity();
+        //commodity_container.fetchNewCommodities("/commodity/get?type=" + type)
       })
     }
+    initSearchContainer(commodity_container);
   }
 })();
 

@@ -2,17 +2,47 @@ class CommodityStatistic{
   constructor(container){
     this.container = container;
     this.items_container = this.container.getElementsByClassName('main_items')[0];
-    for(var i =0 ; i < 10; i++){
-      this.addItem({
-        "name":"shop1",
-        "seller":"seller1",
-        "sold_number":12,
-        "price":12,
-        "number":12,
-        "status":"上架",
-        "income":123
-      })
+  }
+
+  flushItems(){
+    this.clearAllItems();
+    this.fetchNewGrade();
+  }
+
+  clearAllItems(){
+    var items = this.items_container.getElementsByClassName('main_seller_grade_item');
+    var idx = 0, len = items.length;
+    while(idx < len){
+      this.items_container.removeChild(items[idx]);
+      len--;
     }
+  }
+
+  fetchNewGrade(){
+    var url = getUrlByType('shop','grade',{"all":"1"});
+    getJSON(url).then((json)=>{
+      if(json['code'] == 200){
+        var grades = json['data'].map((grade)=>{
+          return {
+            "name":grade['name'],
+            "seller":grade['seller_name'],
+            "sold_number":grade['sold_number'],
+            "cur_price":grade['cur_price'],
+            "cur_number":grade['cur_number'],
+            "status":grade['status'],
+            "income":grade['income']
+          }
+        });
+        if(grades){
+          for(let grade of grades){
+            this.addItem(grade);
+          }
+        }
+      }
+      else{
+        console.log("获取失败");
+      }
+    })
   }
 
   closeContainer(){
@@ -52,8 +82,8 @@ class CommodityStatistic{
     var name = data['name'];
     var seller = data['seller'];
     var sold_number = data['sold_number'];
-    var cur_price = data['price'];
-    var cur_number = data['number'];
+    var cur_price = data['cur_price'];
+    var cur_number = data['cur_number'];
     var cur_status = data['status'];
     var income = data['income'];
 

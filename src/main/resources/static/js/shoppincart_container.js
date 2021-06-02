@@ -23,8 +23,8 @@ class ShoppingcartContainer{
         for(let cid of cids){
           let ele = this.ele_cid[cid];
           if(ele.getElementsByTagName('input')[0].checked){
-            let number = Number.parseInt(ele.getElementsByClassName('shoppingcart_number')[0].innerText);
-            data.append({
+            let number = Number.parseInt(ele.getElementsByTagName('input')[1].value);
+            data.push({
               "c":Number.parseInt(cid),
               "n":number
             });
@@ -38,8 +38,8 @@ class ShoppingcartContainer{
         }
         docCookies.setItem('order',JSON.stringify(data));
         window.location.assign("/user/order");
-      } catch (e) {
-        console.log(e,error);
+      } catch (error) {
+        console.log(error);
       }
 
     })

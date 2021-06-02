@@ -21,6 +21,8 @@ public class ViewRecord {
     Long uid;
     @Column(name = "cid",nullable = false)
     Long cid;
+    @Column(name = "uid_seller",nullable = false)
+    Long uidSeller;
     @Column(name = "enter_ip",columnDefinition = "char(15)", nullable = false)
     String enterIp;
     @Column(name = "enter_timestamp",nullable = false)
@@ -32,6 +34,9 @@ public class ViewRecord {
     @Column(name = "status",nullable = false)
     Integer status;
 
+    public Long getUidSeller() {
+        return uidSeller;
+    }
     public Long getCid() {
         return cid;
     }
@@ -80,5 +85,8 @@ public class ViewRecord {
     }
     public void setEnterTimestamp(Long enterTimestamp) {
         this.enterTimestamp = enterTimestamp;
+    }
+    public void setUidSeller(Long uidSeller) {
+        this.uidSeller = uidSeller;
     }
 }

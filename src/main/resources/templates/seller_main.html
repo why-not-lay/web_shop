@@ -2,21 +2,22 @@
   <head>
     <title>卖家主页</title>
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
-    <link rel="stylesheet" href="/static/css/sidebar.css">
-    <link rel="stylesheet" href="/static/css/seller_main.css">
-    <link rel="stylesheet" href="/static/css/seller_main_commodity_managerment.css">
-    <link rel="stylesheet" href="/static/css/seller_main_commodity_record.css">
+    <link rel="stylesheet" href="/css/sidebar.css">
+    <link rel="stylesheet" href="/css/seller_main.css">
+    <link rel="stylesheet" href="/css/seller_main_commodity_managerment.css">
+    <link rel="stylesheet" href="/css/seller_main_commodity_record.css">
   </head>
   <body>
     <div id="sidebar">
       <div id="top_container">
         <div id="photo"></div>
-        <div id="name">seller</div>
+        <div id="name" th:text="${user.username}">seller</div>
       </div>
       <div id="body_container">
         <div class="body_item" id="item_selected">商品管理</div>
         <div class="body_item">销售记录</div>
         <div class="body_item">浏览记录</div>
+        <div class="body_item">注销</div>
       </div>
     </div>
     <div id="main">
@@ -132,10 +133,10 @@
       </div>
     </div>
   </body>
-  <script src="/static/js/tool.js"></script>
-  <script src="/static/js/seller_commodity.js"></script>
-  <script src="/static/js/seller_commodity_view.js"></script>
-  <script src="/static/js/seller_commodity_trade.js"></script>
-  <script src="/static/js/commodity_detail.js"></script>
-  <script src="/static/js/seller_main.js"></script>
+  <script src="/js/tool.js"></script>
+  <script src="/js/seller_commodity.js"></script>
+  <script src="/js/seller_commodity_view.js"></script>
+  <script src="/js/seller_commodity_trade.js"></script>
+  <script src="/js/commodity_detail.js"></script>
+  <script src="/js/seller_main.js"></script>
 </html>

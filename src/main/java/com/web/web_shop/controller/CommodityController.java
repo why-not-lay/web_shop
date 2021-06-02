@@ -84,7 +84,7 @@ public class CommodityController {
         commodityRepository.save(commodity);
 
 
-        return APIResult.createOK(commodity);
+        return APIResult.createOKMessage("添加成功");
     }
 
     @RequestMapping(value = "/update",method = RequestMethod.POST)
@@ -137,10 +137,10 @@ public class CommodityController {
 
         commodityRepository.save(commodity);
 
-        return APIResult.createOK(commodity);
+        return APIResult.createOKMessage("修改成功");
     }
 
-    @RequestMapping(value = "/delete",method = RequestMethod.POST)
+    @RequestMapping(value = "/delete",method = RequestMethod.GET)
     public APIResult deleteCommodity(@RequestParam(required = false) String cid) {
         Integer code = Util.isLogin(session);
         if(code == Constant.UserType.USER || code == Constant.UserType.NOT_USER)
@@ -157,7 +157,7 @@ public class CommodityController {
 
         commodityRepository.updateStatusByCid(Long.parseLong(cid),Constant.RecordStatus.DELETED);
 
-        return APIResult.createNG("删除成功");
+        return APIResult.createOKMessage("删除成功");
     }
 
     @RequestMapping(value = "/get", method = RequestMethod.GET)
