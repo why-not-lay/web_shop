@@ -6,6 +6,7 @@
     <title>商品主页</title>
     <link rel="stylesheet" href="/css/main_page.css">
     <link rel="stylesheet" href="/css/shoppingcart.css">
+    <link rel="stylesheet" href="/css/commodity_detail.css">
     <link rel="stylesheet" href="/css/commodity.css">
   </head>
   <body>
@@ -86,8 +87,56 @@
       <div type="5" class="type">用</div>
     </div>
 
+    <div  id="create_container" class="flow_container">
+      <button id="create_container_close">X</button>
+      <div id="create_title">
+        <h2>新建商品</h2>
+      </div>
+      <div id="create_main">
+        <div id="create_pic_container">
+          <img src="#" />
+        </div>
+        <div id="create_desc_container">
+          <div class="create_desc_item" id="create_desc_name">
+            商品名：
+            <input type="text">
+          </div>
+          <div class="create_desc_item" id="create_desc_price">
+            价格：
+            <input type="number" value="0">
+          </div>
+          <div class="create_desc_item" id="create_desc_number">
+            数量：
+            <input type="number" value="0">
+          </div>
+          <div class="create_desc_item" id="create_desc_type">
+            种类：
+            <select name="" id="">
+              <option value="0">未分类</option>
+              <option value="1">衣</option>
+              <option value="2">食</option>
+              <option value="3">住</option>
+              <option value="4">行</option>
+              <option value="5">用</option>
+            </select>
+          </div>
+          <div class="create_desc_item" id="create_desc_description">
+            商品描述：
+            <textarea name="" id="" ></textarea>
+          </div>
+        </div>
+      </div>
+      <div id="create_func_container">
+        <div id="create_func_container">
+          <div class="create_func"><button class="create_btn_for_upload">上传图片</button></div>
+          <div class="create_func"><button class="create_btn_for_cancel">取消</button></div>
+          <div class="create_func"><button class="create_btn_for_save">保存</button></div>
+        </div>
+      </div>
+    </div>
   </body>
   <script src="/js/tool.js"></script>
+  <script src="/js/commodity_detail.js"></script>
   <script src="/js/shoppincart_container.js"></script>
   <script src="/js/commodity_container.js"></script>
   <script src="/js/main_page.js"></script>

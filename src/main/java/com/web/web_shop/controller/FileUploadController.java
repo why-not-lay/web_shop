@@ -42,27 +42,27 @@ public class FileUploadController {
     }
 
     @RequestMapping(value = "/pic/upload", method = RequestMethod.POST)
-    @ResponseBody
-    public APIResult handleFileUpload(
+    public String handleFileUpload(
         @RequestParam("file") MultipartFile file,
         @RequestParam("cid") String cid,
         HttpSession session) {
         Integer code = Util.isLogin(session);
         if(code == Constant.UserType.USER || code == Constant.UserType.NOT_USER)
-            return APIResult.createNG("错误操作");
+            return "redirect:/";
         if(!Util.Certify.certifyNumber(cid)) {
-            return APIResult.createNG("格式错误");
+            return "redirect:/shop";
         }
 
         String content_type = file.getContentType();
         if("image/png".equals(content_type) || "image/jpg".equals(content_type) ||"image/jpeg".equals(content_type)) {
             Commodity commodity = commodityRepository.findByCidAndStatus(Long.parseLong(cid), Constant.RecordStatus.EXIST);
-            if(commodity == null) return APIResult.createNG("格式错误");
+            if(commodity == null) return "redirect:/shop";
             String pathname = commodity.getPicDir() + '/' + file.getOriginalFilename();
             storageService.store(file,pathname);
-        } else
-            return APIResult.createNG("格式错误");
-        return APIResult.createOK("上传成功");
+        } else {
+            return "redirect:/shop";
+        }
+        return "redirect:/shop";
     }
 
     @RequestMapping(value = "/pic/get",method=RequestMethod.GET)

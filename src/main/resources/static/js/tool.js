@@ -91,6 +91,7 @@ var deboune = function(fn,delay) {
   return function() {
     var that = this;
     var argus = arguments;
+    console.log("de");
     if(timer){
       return;
     }

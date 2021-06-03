@@ -56,6 +56,13 @@ public class FileSystemStorageService implements StorageService {
             File dir = new File(dirname);
             if(!dir.exists() && !dir.isDirectory()) {
                 dir.mkdir();
+            } else if(dir.exists() && dir.isDirectory()) {
+                File[] filenames = dir.listFiles(filepath-> {
+                    return filepath.isFile();
+                });
+                for(File filename : filenames) {
+                    filename.delete();
+                }
             }
             try (InputStream inputStream = file.getInputStream()) {
 
@@ -106,9 +113,17 @@ public class FileSystemStorageService implements StorageService {
         try {
             dirname =this.rootLocation.resolve(dirname).toString();
             File dir = new File(dirname);
+            if(!dir.exists()) {
+                String new_path = "static/shop.png";
+                return this.loadAsResource(new_path);
+            }
             File[] filenames = dir.listFiles(pathname-> {
                 return pathname.isFile();
             });
+            if(filenames.length == 0) {
+                String new_path = "static/shop.png";
+                return this.loadAsResource(new_path);
+            }
             return this.loadAsResource(filenames[0].getName());
         } catch (Exception e) {
             throw new StorageFileNotFoundException("Could not read file: " + dirname, e);

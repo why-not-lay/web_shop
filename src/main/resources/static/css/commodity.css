@@ -5,6 +5,11 @@
   border-bottom: 5px solid #57606f;
   display: flex;
   background-color:white;
+  cursor: pointer;
+}
+.commodity:hover{
+  box-shadow:0 0 3px 3px rgba(0,0,0,0.15);
+  transition: box-shadow 0.5s;
 }
 .commodity_pic{
   width:280px;

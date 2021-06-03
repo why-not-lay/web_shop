@@ -3,6 +3,8 @@ package com.web.web_shop.controller;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServlet;
+import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.web.web_shop.DAO.CommodityRepository;
@@ -23,9 +25,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
+import org.springframework.web.bind.annotation.CookieValue;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
 /**
@@ -50,6 +54,47 @@ public class RecordController {
     @Autowired
     HttpSession session;
 
+    @RequestMapping(value="/view",method = RequestMethod.GET)
+    public String fetchViewRecord(
+        HttpServletRequest request,
+        @CookieValue(value ="vc") String view_cid,
+        @CookieValue(value = "vb") String view_start,
+        @CookieValue(value = "ve") String view_end) {
+
+        if("".equals(view_cid) || "".equals(view_start) || "".equals(view_end)) {
+            return null;
+        }
+        Long cid = Long.parseLong(view_cid);
+        Long start = Long.parseLong(view_start);
+        Long end = Long.parseLong(view_end);
+
+        System.out.println(cid);
+        System.out.println(start);
+        System.out.println(end);
+
+        Commodity commodity = commodityRepository.findByCid(cid);
+
+        String ip = Util.getIpAddr(request);
+        ViewRecord view_record = new ViewRecord();
+        view_record.setCid(cid);
+        view_record.setUidSeller(commodity.getUid());
+        view_record.setStatus(Constant.RecordStatus.EXIST);
+        view_record.setOutIp(ip);
+        view_record.setEnterIp(ip);
+        view_record.setOutTimestamp(end);
+        view_record.setEnterTimestamp(start);
+
+        Integer code = Util.isLogin(session);
+        if(code == Constant.UserType.USER) {
+            User user = (User)session.getAttribute("user");
+            view_record.setUid(user.getUid());
+        } else if(code == Constant.UserType.NOT_USER) {
+            view_record.setUid(-1L);
+        }
+        viewRecordRepository.save(view_record);
+        return null;
+    }
+
     @RequestMapping(value = "/view/get",method = RequestMethod.GET)
     public APIResult getViewRecord(
         @RequestParam(value = "page",defaultValue = "0") String page,
@@ -68,8 +113,8 @@ public class RecordController {
         //if(!Util.Certify.certifyNumber(uid))
         //    return APIResult.createNG("格式错误");
         Pageable pageable = PageRequest.of(Integer.parseInt(page), Integer.parseInt(number));
-        Page<ViewRecord> trade_container = viewRecordRepository.findByUidSellerAndStatus(seller.getUid(), Constant.RecordStatus.EXIST, pageable);
-        List<ViewRecord> view_records = trade_container.getContent();
+        Page<ViewRecord> view_container = viewRecordRepository.findByUidSellerAndStatus(seller.getUid(), Constant.RecordStatus.EXIST, pageable);
+        List<ViewRecord> view_records = view_container.getContent();
         List<DataView> data_views = new ArrayList<DataView>();
         for(ViewRecord view : view_records) {
             User user = userRepository.findByUid(view.getUid());

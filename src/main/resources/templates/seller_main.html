@@ -4,7 +4,9 @@
     <meta http-equiv="Content-Type" content="text/html;charset=UTF-8">
     <link rel="stylesheet" href="/css/sidebar.css">
     <link rel="stylesheet" href="/css/seller_main.css">
+    <link rel="stylesheet" href="/css/pic_uploader_container.css">
     <link rel="stylesheet" href="/css/seller_main_commodity_managerment.css">
+    <link rel="stylesheet" href="/css/commodity_detail.css">
     <link rel="stylesheet" href="/css/seller_main_commodity_record.css">
   </head>
   <body>
@@ -128,12 +130,28 @@
         </div>
       </div>
       <div id="create_func_container">
-        <div class="create_func"><button>取消</button></div>
-        <div class="create_func"><button>保存</button></div>
+        <div id="create_func_container">
+          <div class="create_func"><button class="create_btn_for_upload">上传图片</button></div>
+          <div class="create_func"><button class="create_btn_for_cancel">取消</button></div>
+          <div class="create_func"><button class="create_btn_for_save">保存</button></div>
+        </div>
+      </div>
+    </div>
+
+    <div id="pic_uploader_container">
+      <button>x</button>
+      <h2>图片上传</h2>
+      <div id="pic_uploader">
+        <form action="/pic/upload" method="post" enctype="multipart/form-data">
+          <input type="file" name="file">
+          <input type="hidden" name="cid" value="">
+          <input type="submit" name="上传">
+        </form>
       </div>
     </div>
   </body>
   <script src="/js/tool.js"></script>
+  <script src="/js/pic_uploader.js"></script>
   <script src="/js/seller_commodity.js"></script>
   <script src="/js/seller_commodity_view.js"></script>
   <script src="/js/seller_commodity_trade.js"></script>

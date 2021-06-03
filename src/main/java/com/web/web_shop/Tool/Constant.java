@@ -45,4 +45,26 @@ public final  class Constant {
         int CommodityStatus_LENGTH = 3;
     }
 
+    public interface OPERATION_OBJECT {
+        int CREATE = 1;
+        int DELETE = 2;
+        int SEARCH = 3;
+        int UPDATE = 4;
+    }
+
+    public interface OPERATION_NONE {
+        int GET_COMMODITY = 1;
+        int GET_TRADE = 2;
+        int GET_VIEW = 3;
+        int GET_SELLER_GRADE = 4;
+        int GET_COMMODITY_GRADE = 5;
+    }
+
+    public interface OBJECT_TYPE {
+        int NONE = 0;
+        int COMMODITY = 1;
+        int USER = 2;
+    }
+
+
 }

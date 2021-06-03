@@ -1,7 +1,8 @@
 class CommodityContainer {
-  constructor(container,shoppincart_container){
+  constructor(container,shoppincart_container, commodity_detail_container){
     this.ele_container = container;
     this.shoppincart_container = shoppincart_container;
+    this.commodity_detail_container = commodity_detail_container;
     this.type = 10;
     this.page = 0;
     this.page_num = 10;
@@ -9,9 +10,18 @@ class CommodityContainer {
     this.initGlobalEvent();
   }
 
+
   flushCommodities(){
     this.clearAllCommodity();
     this.fetchNewCommodities();
+  }
+
+  increasePage(){
+    this.page++;
+  }
+
+  decreasePage(){
+    this.page = this.page > 0 ? this.page -1 : 0;
   }
 
   initGlobalEvent(){
@@ -34,16 +44,19 @@ class CommodityContainer {
     var scrollToEnd = ()=>{
       var scroll_top = getScrollTop();
       var scroll_height = document.body.scrollHeight;
-      var inner_heght = window.innerHeight;
-      if(scroll_top + inner_heght === scroll_height){
+      var inner_height = window.innerHeight;
+      var epsion = 10;
+      console.log(scroll_top);
+      console.log(scroll_height);
+      console.log(inner_height);
+      if(scroll_height - (scroll_top + inner_height) <= epsion){
         console.log("end");
-        this.page++;
+        this.increasePage();
         this.fetchNewCommodities();
       }
     }
     var deScrollToEnd = deboune(scrollToEnd,1000);
     window.addEventListener('scroll',deScrollToEnd);
-
   }
 
   setType(type){
@@ -53,6 +66,7 @@ class CommodityContainer {
 
   fetchNewCommodities(){
     var url = getUrlByType('commodity','get',{"page":this.page,"number":this.page_num,"type":this.type});
+    console.log(this.page,this.page_num,this.type);
     var promise = getJSON(url);
     promise.then((json)=>{
       if(json['code'] !== 200) return;
@@ -62,19 +76,17 @@ class CommodityContainer {
           "name":commodity['name'],
           "desc":commodity['description'],
           "price":commodity['price'],
-          "pic":""
+          "pic":"pic/get?cid="+commodity['cid']
 
         }
       })
-      if(commodities){
+      if(commodities && commodities.length !== 0){
         for(let commodity of commodities){
           this.addCommodity(commodity);
         }
       }
       else{
-        if(this.page-1){
-          this.page--;
-        }
+        this.decreasePage();
       }
     })
   }
@@ -107,16 +119,14 @@ class CommodityContainer {
   }
 
   initCommodityValue(ele,commodity_data){
-    var commodity_name, commodity_desc, commodity_price,
-      commodity_pic_url, commodity_cid;
     if(!commodity_data){
       return;
     }
-    commodity_name = commodity_data['name'];
-    commodity_desc = commodity_data['desc'];
-    commodity_price = commodity_data['price'];
-    commodity_pic_url = commodity_data['pic'];
-    commodity_cid = commodity_data["cid"];
+    var commodity_name = commodity_data['name'];
+    var commodity_desc = commodity_data['desc'];
+    var commodity_price = commodity_data['price'];
+    var commodity_pic_url = commodity_data['pic'];
+    var commodity_cid = commodity_data["cid"];
 
     ele.setAttribute('cid',commodity_cid);
     ele.getElementsByTagName('img')[0].setAttribute("src",commodity_pic_url);
@@ -133,28 +143,33 @@ class CommodityContainer {
     var btn_minus = ele.getElementsByClassName('btn_num_minus')[0];
     var btn_plus = ele.getElementsByClassName('btn_num_plus')[0];
     var ele_value = btn_minus.nextElementSibling
-    ele_value.addEventListener('change',()=>{
+    ele_value.addEventListener('change',(e)=>{
       var value = Number.parseInt(ele_value.value);
       if(value < 0) ele_value.value = 0;
+      e.stopPropagation();
     })
-    btn_minus.addEventListener('click',()=>{
+    btn_minus.addEventListener('click',(e)=>{
       var value = Number.parseInt(ele_value.value);
       btn_minus.nextElementSibling.value = value - 1 <= 0 ? 0 : value - 1;
+      e.stopPropagation();
     })
-    btn_plus.addEventListener('click',()=>{
+    btn_plus.addEventListener('click',(e)=>{
       var value = Number.parseInt(ele_value.value);
       btn_minus.nextElementSibling.value = value + 1;
+      e.stopPropagation();
     })
 
     var btn_buy = ele.getElementsByClassName('commodity_trade_item')[0];
     var btn_shoppingcart = ele.getElementsByClassName('commodity_trade_item')[1];
-    btn_buy.addEventListener('click',()=>{
+    btn_buy.addEventListener('click',(e)=>{
+      e.stopPropagation();
       var cid = ele.getAttribute('cid');
       var number = ele_value.value;
       docCookies.setItem('order',JSON.stringify([{"c":cid,"n":number}]));
       window.location.assign("/user/order");
     })
-    btn_shoppingcart.addEventListener('click',()=>{
+    btn_shoppingcart.addEventListener('click',(e)=>{
+      e.stopPropagation();
       var number = ele_value.value;
       var cid = ele.getAttribute('cid');
       var name = ele.getElementsByClassName('commodity_name')[0].innerText;
@@ -168,7 +183,22 @@ class CommodityContainer {
         "pic":pic_url
       });
     })
-
+    ele.addEventListener('click',()=>{
+      var cid =ele.getAttribute('cid');
+      this.commodity_detail_container.bindItem(this,ele);
+      this.commodity_detail_container.setEditable(false);
+      this.commodity_detail_container.setValue({
+        "title":"商品详情",
+        "cid":cid,
+        "name":ele.getElementsByTagName('h2')[0].innerText,
+        "price":ele.getElementsByTagName('span')[2].innerText,
+        "number":ele.getElementsByTagName('input')[0].value,
+        "type":this.type,
+        "desc":ele.getElementsByTagName('span')[0].innerText,
+        "status":"1"
+      })
+      this.commodity_detail_container.displayContainer();
+    })
 
 
   }

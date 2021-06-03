@@ -13,6 +13,7 @@ import com.web.web_shop.Tool.Util;
 import com.web.web_shop.beans.APIResult;
 import com.web.web_shop.beans.Commodity;
 import com.web.web_shop.beans.DataCommodity;
+import com.web.web_shop.beans.OperationRecord;
 import com.web.web_shop.beans.User;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -210,6 +211,13 @@ public class CommodityController {
             data_commodities.addAll(Util.tran2DataCommodityList(commodities_onSale,null,true));
         }
         return APIResult.createOK(data_commodities);
+    }
+
+    private OperationRecord getOperationRecordWithObject() {
+        OperationRecord operation_record = new OperationRecord();
+        operation_record.setIp(Util.getIpAddr(request));
+        operation_record.setDate(.);
+        return operation_record;
     }
 
 }

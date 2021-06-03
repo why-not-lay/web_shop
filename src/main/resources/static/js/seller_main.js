@@ -5,8 +5,10 @@
     var ele_trade = document.getElementById('main_commodity_trade');
     var ele_view = document.getElementById('main_commodity_view');
     var ele_commodity_detail = document.getElementById('create_container');
+    var ele_pic_uploader = document.getElementById('pic_uploader_container');
 
-    var commodity_detail_container = new CommodityDetail(ele_commodity_detail);
+    var pic_uploader_container = new PicUploader(ele_pic_uploader);
+    var commodity_detail_container = new CommodityDetail(ele_commodity_detail,pic_uploader_container);
     var commodity_container = new SellerCommodity(ele_managerment, commodity_detail_container);
     var view_container = new CommodityView(ele_view);
     var trade_container = new CommodityTrade(ele_trade)

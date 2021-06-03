@@ -29,7 +29,9 @@
 
     btn.addEventListener('click',()=>{
       var keyword = input.value;
-      var url = getUrlByType('search',"",{"key":keyword});
+      input.value = "";
+      var type = document.getElementById('type_seleted').getAttribute('type');
+      var url = getUrlByType('search',"",{"key":keyword,"type":type});
       getJSON(url).then((json)=>{
         if(json['code'] === 200){
           var commodities = json['data'].map((commodity)=>{
@@ -60,8 +62,9 @@
   window.onload = function() {
     initShoppingcart();
     //initTypeContainer();
+    var commodity_detail_container = new CommodityDetail(document.getElementById('create_container'),null);
     var shoppingcart_container = new ShoppingcartContainer(document.getElementById('shoppingcart_items'));
-    var commodity_container = new CommodityContainer(document.getElementById('main'),shoppingcart_container)
+    var commodity_container = new CommodityContainer(document.getElementById('main'),shoppingcart_container, commodity_detail_container);
     //initNumberMinusPlus();
     var eles_type = document.getElementsByClassName('type');
     var ele_type_cur = eles_type[0];
@@ -72,8 +75,6 @@
         ele_type_cur = ele;
         var type = ele.getAttribute('type');
         commodity_container.setType(Number.parseInt(type));
-        //commodity_container.clearAllCommodity();
-        //commodity_container.fetchNewCommodities("/commodity/get?type=" + type)
       })
     }
     initSearchContainer(commodity_container);
