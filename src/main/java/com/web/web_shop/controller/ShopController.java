@@ -12,6 +12,7 @@ import com.web.web_shop.beans.Commodity;
 import com.web.web_shop.beans.DataGrade;
 import com.web.web_shop.beans.DataSeller;
 import com.web.web_shop.beans.OnlineRecord;
+import com.web.web_shop.beans.OperationRecord;
 import com.web.web_shop.beans.Shop;
 import com.web.web_shop.beans.Trade;
 import com.web.web_shop.beans.User;
@@ -20,6 +21,7 @@ import com.web.web_shop.Tool.Constant;
 import com.web.web_shop.Tool.Util;
 import com.web.web_shop.DAO.CommodityRepository;
 import com.web.web_shop.DAO.OnlineRecordRepository;
+import com.web.web_shop.DAO.OperationRecordRepository;
 import com.web.web_shop.DAO.ShopRepository;
 import com.web.web_shop.DAO.TradeRepository;
 
@@ -49,6 +51,8 @@ public class ShopController {
     private CommodityRepository commodityRepository;
     @Autowired
     private OnlineRecordRepository onlineRecordRepository;
+    @Autowired
+    private OperationRecordRepository operationRecordRepository;
     @Autowired
     private HttpServletRequest request;
     @Autowired
@@ -99,6 +103,16 @@ public class ShopController {
             return APIResult.createNG("无该用户");
         user.setPassword(password);
         userRepository.save(user);
+
+        User admin = (User)session.getAttribute("user");
+        String content = normalizeKeyValuePair("uid",uid);
+        OperationRecord operation_record = getOperationRecordWithObject();
+        operation_record.setMainUid(admin.getUid());
+        operation_record.setOperationType(Constant.OPERATION_OBJECT.UPDATE);
+        operation_record.setContent(content);
+        operationRecordRepository.save(operation_record);
+
+
         return APIResult.createOKMessage("修改成功");
     }
 
@@ -215,6 +229,7 @@ public class ShopController {
         for(User seller:sellers) {
             data_sellers.add(Util.tran2DataSeller(seller));
         }
+
         return APIResult.createOK(data_sellers);
     }
 
@@ -229,6 +244,10 @@ public class ShopController {
         if(!Util.Certify.certifyNumber(uid))
             return APIResult.createNG("格式错误");
 
+        String content = normalizeKeyValuePair("uid",uid);
+        content += normalizeKeyValuePair("all",all);
+        OperationRecord operation_record = getOperationRecordWithNone();
+        operation_record.setContent(content);
         List<DataGrade> data_grades = new ArrayList<DataGrade>();
         if(all != null) {
             User admin = (User)session.getAttribute("user");
@@ -236,11 +255,98 @@ public class ShopController {
             for(User seller: sellers) {
                 data_grades.addAll(getDataGradesByUid(seller.getUid()));
             }
+
+            operation_record.setMainUid(admin.getUid());
+            operation_record.setOperationType(Constant.OPERATION_NONE.GET_COMMODITY_GRADE);
         } else {
             data_grades.addAll(getDataGradesByUid(Long.parseLong(uid)));
+
+            User seller = (User)session.getAttribute("user");
+            operation_record.setMainUid(seller.getUid());
+            operation_record.setOperationType(Constant.OPERATION_NONE.GET_SELLER_GRADE);
         }
+        operationRecordRepository.save(operation_record);
         return APIResult.createOK(data_grades);
     }
+
+
+    @RequestMapping(value = "/registerSeller", method = RequestMethod.POST)
+    @ResponseBody
+    public APIResult registerSeller(
+        @RequestParam(required=false) String username,
+        @RequestParam(required=false) String password) {
+
+        Integer code = Util.isLogin(session);
+        if(code != Constant.UserType.ADMIN)
+            return APIResult.createNG("错误操作");
+        if(username == null || password == null)
+            return APIResult.createNG("参数缺失");
+
+        User old_user = userRepository.findByUsernameAndTypeAndStatus(username, Constant.UserType.SELLER,Constant.RecordStatus.EXIST);
+        if(old_user != null)
+            return APIResult.createNG("重复添加");
+        User user = new User();
+        User user_parent = (User)session.getAttribute("user");
+        String ip_addr = Util.getIpAddr(request);
+        user.tran2Seller(username, password,user_parent.getUid(), ip_addr);
+        userRepository.save(user);
+
+        String content = normalizeKeyValuePair("username",username);
+        OperationRecord operation_record = getOperationRecordWithObject();
+        operation_record.setMainUid(user_parent.getUid());
+        operation_record.setOperationType(Constant.OPERATION_OBJECT.CREATE);
+        operation_record.setContent(content);
+        operationRecordRepository.save(operation_record);
+
+        return APIResult.createOKMessage("创建成功");
+    }
+
+    @RequestMapping(value = "/deleteSeller", method = RequestMethod.GET)
+    @ResponseBody
+    public APIResult registerSeller(
+        @RequestParam(required=false) String uid) {
+
+        Integer code = Util.isLogin(session);
+        if(code != Constant.UserType.ADMIN)
+            return APIResult.createNG("错误操作");
+        if(!Util.Certify.certifyNumber(uid))
+            return APIResult.createNG("格式错误");
+
+        userRepository.updateStatusByUid(Long.parseLong(uid),Constant.RecordStatus.DELETED);
+
+        User user = (User)session.getAttribute("user");
+        String content = normalizeKeyValuePair("uid",uid);
+        OperationRecord operation_record = getOperationRecordWithObject();
+        operation_record.setMainUid(user.getUid());
+        operation_record.setOperationType(Constant.OPERATION_OBJECT.DELETE);
+        operation_record.setContent(content);
+        operationRecordRepository.save(operation_record);
+
+        return APIResult.createOKMessage("删除成功");
+    }
+
+
+    private OperationRecord getOperationRecordWithNone() {
+        OperationRecord operation_record = new OperationRecord();
+        operation_record.setIp(Util.getIpAddr(request));
+        operation_record.setDate(Util.getDateNow());
+        operation_record.setObjectType(Constant.OBJECT_TYPE.NONE);
+        operation_record.setStatus(Constant.RecordStatus.EXIST);
+        return operation_record;
+    }
+
+    private OperationRecord getOperationRecordWithObject() {
+        OperationRecord operation_record = new OperationRecord();
+        operation_record.setIp(Util.getIpAddr(request));
+        operation_record.setDate(Util.getDateNow());
+        operation_record.setObjectType(Constant.OBJECT_TYPE.USER);
+        operation_record.setStatus(Constant.RecordStatus.EXIST);
+        return operation_record;
+    }
+    private String normalizeKeyValuePair(String key,String value) {
+        return String.format("%s=%s;", key,value);
+    }
+
 
     private List<DataGrade> getDataGradesByUid(Long uid) {
         User user = userRepository.findByUid(uid);
@@ -265,41 +371,4 @@ public class ShopController {
         return data_grades;
     }
 
-    @RequestMapping(value = "/registerSeller", method = RequestMethod.POST)
-    @ResponseBody
-    public APIResult registerSeller(
-        @RequestParam(required=false) String username,
-        @RequestParam(required=false) String password) {
-
-        Integer code = Util.isLogin(session);
-        if(code != Constant.UserType.ADMIN)
-            return APIResult.createNG("错误操作");
-        if(username == null || password == null)
-            return APIResult.createNG("参数缺失");
-
-        User old_user = userRepository.findByUsernameAndTypeAndStatus(username, Constant.UserType.SELLER,Constant.RecordStatus.EXIST);
-        if(old_user != null)
-            return APIResult.createNG("重复添加");
-        User user = new User();
-        User user_parent = (User)session.getAttribute("user");
-        String ip_addr = Util.getIpAddr(request);
-        user.tran2Seller(username, password,user_parent.getUid(), ip_addr);
-        userRepository.save(user);
-        return APIResult.createOKMessage("创建成功");
-    }
-
-    @RequestMapping(value = "/deleteSeller", method = RequestMethod.GET)
-    @ResponseBody
-    public APIResult registerSeller(
-        @RequestParam(required=false) String uid) {
-
-        Integer code = Util.isLogin(session);
-        if(code != Constant.UserType.ADMIN)
-            return APIResult.createNG("错误操作");
-        if(!Util.Certify.certifyNumber(uid))
-            return APIResult.createNG("格式错误");
-
-        userRepository.updateStatusByUid(Long.parseLong(uid),Constant.RecordStatus.DELETED);
-        return APIResult.createOKMessage("删除成功");
-    }
 }

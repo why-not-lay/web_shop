@@ -30,9 +30,14 @@ public class OperationRecord {
     String ip;
     @Column(name = "date", columnDefinition = "char(19)",nullable = false)
     String date;
-    @Column(name = "content",columnDefinition = "char(255)")
+    @Column(name = "status",nullable = false)
+    Integer status;
+    @Column(name = "content",columnDefinition = "varchar(512)")
     String content;
 
+    public void setStatus(Integer status) {
+        this.status = status;
+    }
     public void setObjectId(Long objectId) {
         this.objectId = objectId;
     }
@@ -81,5 +86,8 @@ public class OperationRecord {
     }
     public Integer getOperationType() {
         return operationType;
+    }
+    public Integer getStatus() {
+        return status;
     }
 }

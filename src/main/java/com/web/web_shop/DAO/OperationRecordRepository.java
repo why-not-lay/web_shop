@@ -7,7 +7,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 /**
  * OperationTypeRepository
  */
-public interface OperationTypeRepository extends JpaRepository<OperationRecord,Long> {
+public interface OperationRecordRepository extends JpaRepository<OperationRecord,Long> {
 
 
 }

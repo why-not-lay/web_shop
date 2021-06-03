@@ -8,6 +8,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.web.web_shop.DAO.CommodityRepository;
+import com.web.web_shop.DAO.OperationRecordRepository;
 import com.web.web_shop.DAO.TradeRepository;
 import com.web.web_shop.DAO.UserRepository;
 import com.web.web_shop.DAO.ViewRecordRepository;
@@ -17,6 +18,7 @@ import com.web.web_shop.beans.APIResult;
 import com.web.web_shop.beans.Commodity;
 import com.web.web_shop.beans.DataTrade;
 import com.web.web_shop.beans.DataView;
+import com.web.web_shop.beans.OperationRecord;
 import com.web.web_shop.beans.Trade;
 import com.web.web_shop.beans.User;
 import com.web.web_shop.beans.ViewRecord;
@@ -46,6 +48,9 @@ public class RecordController {
     CommodityRepository commodityRepository;
 
     @Autowired
+    OperationRecordRepository operationRecordRepository;
+
+    @Autowired
     UserRepository userRepository;
 
     @Autowired
@@ -54,9 +59,11 @@ public class RecordController {
     @Autowired
     HttpSession session;
 
+    @Autowired
+    HttpServletRequest request;
+
     @RequestMapping(value="/view",method = RequestMethod.GET)
     public String fetchViewRecord(
-        HttpServletRequest request,
         @CookieValue(value ="vc") String view_cid,
         @CookieValue(value = "vb") String view_start,
         @CookieValue(value = "ve") String view_end) {
@@ -121,6 +128,15 @@ public class RecordController {
             Commodity commodity = commodityRepository.findByCid(view.getCid());
             data_views.add(Util.tran2DataView(view, commodity.getName(), user.getUsername()));
         }
+
+        String content = normalizeKeyValuePair("page",page);
+        content += normalizeKeyValuePair("number",number);
+        OperationRecord operation_record = getOperationRecordWithNone();
+        operation_record.setMainUid(seller.getUid());
+        operation_record.setOperationType(Constant.OPERATION_NONE.GET_VIEW);
+        operation_record.setContent(content);
+        operationRecordRepository.save(operation_record);
+
         return APIResult.createOK(data_views);
     }
 
@@ -146,7 +162,29 @@ public class RecordController {
             User user = userRepository.findByUid(trade.getBuyerUid());
             data_trades.add(Util.tran2DataTrade(trade,user.getUsername()));
         }
+
+        String content = normalizeKeyValuePair("page",page);
+        content += normalizeKeyValuePair("number",number);
+        OperationRecord operation_record = getOperationRecordWithNone();
+        operation_record.setMainUid(seller.getUid());
+        operation_record.setOperationType(Constant.OPERATION_NONE.GET_TRADE);
+        operation_record.setContent(content);
+        operationRecordRepository.save(operation_record);
+
         return APIResult.createOK(data_trades);
+    }
+
+    private OperationRecord getOperationRecordWithNone() {
+        OperationRecord operation_record = new OperationRecord();
+        operation_record.setIp(Util.getIpAddr(request));
+        operation_record.setDate(Util.getDateNow());
+        operation_record.setObjectId(-1L);
+        operation_record.setObjectType(Constant.OBJECT_TYPE.NONE);
+        operation_record.setStatus(Constant.RecordStatus.EXIST);
+        return operation_record;
+    }
+    private String normalizeKeyValuePair(String key,String value) {
+        return String.format("%s=%s;", key,value);
     }
 
 }

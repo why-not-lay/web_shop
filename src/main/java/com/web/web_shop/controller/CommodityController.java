@@ -7,6 +7,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
 import com.web.web_shop.DAO.CommodityRepository;
+import com.web.web_shop.DAO.OperationRecordRepository;
 import com.web.web_shop.DAO.UserRepository;
 import com.web.web_shop.Tool.Constant;
 import com.web.web_shop.Tool.Util;
@@ -38,6 +39,8 @@ public class CommodityController {
     @Autowired
     UserRepository userRepository;
     @Autowired
+    OperationRecordRepository operationRecordRepository;
+    @Autowired
     HttpSession session;
     @Autowired
     HttpServletRequest request;
@@ -68,7 +71,6 @@ public class CommodityController {
         if(!Util.Certify.certifyCommodityDescription(description))
             return APIResult.createNG("描述格式有误");
 
-
         User user = (User)session.getAttribute("user");
 
         Commodity commodity = new Commodity();
@@ -84,6 +86,18 @@ public class CommodityController {
         commodity.setPicDir(DigestUtils.md5DigestAsHex(shopname.getBytes()));
         commodityRepository.save(commodity);
 
+        String content = normalizeKeyValuePair("shoppname",shopname);
+        content += normalizeKeyValuePair("price",price);
+        content += normalizeKeyValuePair("number",number);
+        content += normalizeKeyValuePair("description",description);
+        content += normalizeKeyValuePair("type",type);
+
+        OperationRecord operation_record = getOperationRecordWithObject();
+        operation_record.setMainUid(user.getUid());
+        operation_record.setObjectId(commodity.getCid());
+        operation_record.setContent(content);
+        operation_record.setOperationType(Constant.OPERATION_OBJECT.CREATE);
+        operationRecordRepository.save(operation_record);
 
         return APIResult.createOKMessage("添加成功");
     }
@@ -113,30 +127,54 @@ public class CommodityController {
         if(user.getUid() != commodity.getUid())
             return APIResult.createNG("错误操作");
 
-        if(Util.Certify.certifyShopname(shopname)) {
+        String content = "";
+        if(Util.Certify.certifyShopname(shopname)
+                && !shopname.equals(commodity.getName())) {
+
             commodity.setName(shopname);
+            content += normalizeKeyValuePair("shoppname",shopname);
         }
-        if(Util.Certify.certifyNumber(price)) {
+        if(Util.Certify.certifyNumber(price)
+                && !price.equals(commodity.getPrice().toString())) {
+
             commodity.setPrice(Integer.parseInt(price));
+            content += normalizeKeyValuePair("price",price);
         }
-        if(Util.Certify.certifyNumber(number)) {
+        if(Util.Certify.certifyNumber(number)
+                && !price.equals(commodity.getCurNumber().toString())) {
+
             Integer cur = commodity.getCurNumber();
             Integer now = Integer.parseInt(number);
             Integer accumulation = now - cur;
             commodity.setCurNumber(now);
             commodity.setTotalNumber(commodity.getTotalNumber()+accumulation);
+            content += normalizeKeyValuePair("number",number);
         }
-        if(Util.Certify.certifyNumber(type)) {
+        if(Util.Certify.certifyNumber(type)
+                && !type.equals(commodity.getType().toString())) {
+
             commodity.setType(Integer.parseInt(type));
+            content += normalizeKeyValuePair("type",type);
         }
-        if(description != null && Util.Certify.certifyCommodityDescription(description)) {
+        if(description != null
+                && Util.Certify.certifyCommodityDescription(description)
+                && !description.equals(commodity.getDescription())) {
+
             commodity.setDescription(description);
+            content += normalizeKeyValuePair("description",description);
         }
         if(Util.Certify.certifyCommodityComStatus(comStatus)) {
             commodity.setComStatus(Integer.parseInt(comStatus));
         }
 
         commodityRepository.save(commodity);
+
+        OperationRecord operation_record = getOperationRecordWithObject();
+        operation_record.setMainUid(user.getUid());
+        operation_record.setContent(content);
+        operation_record.setObjectId(commodity.getCid());
+        operation_record.setOperationType(Constant.OPERATION_OBJECT.UPDATE);
+        operationRecordRepository.save(operation_record);
 
         return APIResult.createOKMessage("修改成功");
     }
@@ -157,6 +195,14 @@ public class CommodityController {
             return APIResult.createNG("没有该商品");
 
         commodityRepository.updateStatusByCid(Long.parseLong(cid),Constant.RecordStatus.DELETED);
+
+        User user = (User)session.getAttribute("user");
+        OperationRecord operation_record = getOperationRecordWithObject();
+        operation_record.setMainUid(user.getUid());
+        operation_record.setContent("");
+        operation_record.setObjectId(commodity.getCid());
+        operation_record.setOperationType(Constant.OPERATION_OBJECT.DELETE);
+        operationRecordRepository.save(operation_record);
 
         return APIResult.createOKMessage("删除成功");
     }
@@ -210,14 +256,32 @@ public class CommodityController {
             data_commodities = new ArrayList<DataCommodity>();
             data_commodities.addAll(Util.tran2DataCommodityList(commodities_onSale,null,true));
         }
+
+        if(code == Constant.UserType.ADMIN || code == Constant.UserType.SELLER) {
+            String content = normalizeKeyValuePair("page",page);
+            content = normalizeKeyValuePair("number",number);
+            content = normalizeKeyValuePair("type",type);
+            OperationRecord operation_record = getOperationRecordWithObject();
+            operation_record.setMainUid(user.getUid());
+            operation_record.setContent(content);
+            operation_record.setObjectId(-1L);
+            operation_record.setOperationType(Constant.OPERATION_OBJECT.SEARCH);
+            operationRecordRepository.save(operation_record);
+        }
+
         return APIResult.createOK(data_commodities);
     }
 
     private OperationRecord getOperationRecordWithObject() {
         OperationRecord operation_record = new OperationRecord();
         operation_record.setIp(Util.getIpAddr(request));
-        operation_record.setDate(.);
+        operation_record.setDate(Util.getDateNow());
+        operation_record.setObjectType(Constant.OBJECT_TYPE.COMMODITY);
+        operation_record.setStatus(Constant.RecordStatus.EXIST);
         return operation_record;
+    }
+    private String normalizeKeyValuePair(String key,String value) {
+        return String.format("%s=%s;", key,value);
     }
 
 }

@@ -58,6 +58,8 @@ public final  class Constant {
         int GET_VIEW = 3;
         int GET_SELLER_GRADE = 4;
         int GET_COMMODITY_GRADE = 5;
+        int GET_PIC = 6;
+        int UPLOAD_PIC = 7;
     }
 
     public interface OBJECT_TYPE {
