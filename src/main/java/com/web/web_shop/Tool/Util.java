@@ -1,5 +1,4 @@
 package com.web.web_shop.Tool;
-
 import java.net.InetAddress;
 import java.text.SimpleDateFormat;
 import java.util.ArrayList;
@@ -149,7 +148,7 @@ public class Util {
         data_view.setUser(username);
         data_view.setStart_time(tran2StrDate(new Date(view.getEnterTimestamp())));
         data_view.setLeave_time(tran2StrDate(new Date(view.getOutTimestamp())));
-        data_view.setDuration(view.getOutTimestamp() - view.getEnterTimestamp());
+        data_view.setDuration((view.getOutTimestamp() - view.getEnterTimestamp()) / 1000);
         return data_view;
     }
 

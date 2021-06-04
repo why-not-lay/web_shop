@@ -37,7 +37,12 @@ public class User {
     private String mail;
     @Column(name="status",nullable=false)
     private Integer status;
+    @Column(name = "favourite_type",nullable = false)
+    private Integer favouriteType;
 
+    public Integer getFavouriteType() {
+        return favouriteType;
+    }
     public Long getUid() {
         return uid;
     }
@@ -66,6 +71,9 @@ public class User {
         return create_date;
     }
 
+    public void setFavouriteType(Integer favouriteType) {
+        this.favouriteType = favouriteType;
+    }
     public void setUid(Long uid) {
         this.uid = uid;
     }
@@ -105,6 +113,7 @@ public class User {
         this.setType(Constant.UserType.USER);
         this.setCreate_ip(ip_addr);
         this.setCreate_date(date);
+        this.setFavouriteType(-1);
     }
 
     //设置为销售员
@@ -118,6 +127,7 @@ public class User {
         this.setType(Constant.UserType.SELLER);
         this.setCreate_ip(ip_addr);
         this.setCreate_date(date);
+        this.setFavouriteType(-1);
     }
 
     //设置为管理员(店主)
@@ -131,5 +141,6 @@ public class User {
         this.setType(Constant.UserType.ADMIN);
         this.setCreate_ip(ip_addr);
         this.setCreate_date(date);
+        this.setFavouriteType(-1);
     }
 }

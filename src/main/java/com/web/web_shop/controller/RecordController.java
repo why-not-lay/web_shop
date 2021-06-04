@@ -42,25 +42,25 @@ import org.springframework.web.bind.annotation.RestController;
 public class RecordController {
 
     @Autowired
-    ViewRecordRepository viewRecordRepository;
+    private ViewRecordRepository viewRecordRepository;
 
     @Autowired
-    CommodityRepository commodityRepository;
+    private CommodityRepository commodityRepository;
 
     @Autowired
-    OperationRecordRepository operationRecordRepository;
+    private OperationRecordRepository operationRecordRepository;
 
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
 
     @Autowired
-    TradeRepository tradeRepository;
+    private TradeRepository tradeRepository;
 
     @Autowired
-    HttpSession session;
+    private HttpSession session;
 
     @Autowired
-    HttpServletRequest request;
+    private HttpServletRequest request;
 
     @RequestMapping(value="/view",method = RequestMethod.GET)
     public String fetchViewRecord(
@@ -125,8 +125,14 @@ public class RecordController {
         List<DataView> data_views = new ArrayList<DataView>();
         for(ViewRecord view : view_records) {
             User user = userRepository.findByUid(view.getUid());
+            String username = "";
+            if(user == null) {
+                username = "访客";
+            } else {
+                username = user.getUsername();
+            }
             Commodity commodity = commodityRepository.findByCid(view.getCid());
-            data_views.add(Util.tran2DataView(view, commodity.getName(), user.getUsername()));
+            data_views.add(Util.tran2DataView(view, commodity.getName(), username));
         }
 
         String content = normalizeKeyValuePair("page",page);

@@ -14,6 +14,8 @@ import com.web.web_shop.DAO.CommodityRepository;
 import com.web.web_shop.DAO.OnlineRecordRepository;
 import com.web.web_shop.DAO.TradeRepository;
 import com.web.web_shop.DAO.UserRepository;
+import com.web.web_shop.Service.DataExtract;
+import com.web.web_shop.Service.SendMail;
 import com.web.web_shop.Tool.Constant;
 import com.web.web_shop.Tool.Util;
 import com.web.web_shop.beans.APIResult;
@@ -51,6 +53,8 @@ public class UserController {
     private HttpSession session;
     @Autowired
     private TradeRepository tradeRepository;
+    @Autowired
+    private SendMail mail;
 
     @RequestMapping(value = "/certify",method = RequestMethod.GET)
     public String getCertityPage() {
@@ -153,6 +157,9 @@ public class UserController {
             OnlineRecord online = (OnlineRecord)session.getAttribute("online");
             online.setBeforeLogout(Util.getIpAddr(request), Util.getDateNow());
             onlineRecordRepository.save(online);
+
+            User user = (User)session.getAttribute("user");
+            session.setAttribute("uid",user.getUid());
             session.removeAttribute("user");
             session.removeAttribute("online");
         }
@@ -279,13 +286,17 @@ public class UserController {
         List<Trade> trades = (List<Trade>)session.getAttribute("trades");
         if(trades == null)
             return "redirect:/";
+
         for(Trade trade:trades ) {
             trade.setFinishDate(Util.getDateNow());
             trade.setFinished(Constant.Finished.FINISH);
             tradeRepository.save(trade);
         }
         session.removeAttribute("trades");
-        modelMap.addAttribute("message","订单支付成功，已经发送邮件");
+
+        User user = (User)session.getAttribute("user");
+        mail.sendMail(user.getMail(),"订单支付成功","你的订单已经支付成功。");
+        modelMap.addAttribute("message","订单支付成功，已经发送邮件，请接收");
         return "message";
     }
 

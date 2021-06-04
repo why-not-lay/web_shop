@@ -29,6 +29,12 @@ class SellerContainer{
     }
   }
 
+  certifyPassword(){
+    var pw = this.container.getElementsByTagName('intput')[1].value;
+    var pw_c = this.container.getElementsByTagName('input')[2].value;
+    return pw === pw_c;
+  }
+
   initEvent(){
     var buttons = this.container.getElementsByTagName('button');
 
@@ -36,6 +42,12 @@ class SellerContainer{
       this.closeContainer();
     })
     buttons[1].addEventListener('click',()=>{
+      if(!this.certifyPassword()){
+        window.alert("密码不一致，请重新输入");
+        this.container.getElementsByTagName('intput')[1].value = "";
+        this.container.getElementsByTagName('input')[2].value = "";
+        return;
+      }
       var data = this.getValue();
       if(data['is_restet']){
         var url = getUrlByType('shop','reset');

@@ -109,6 +109,7 @@ public class ShopController {
         OperationRecord operation_record = getOperationRecordWithObject();
         operation_record.setMainUid(admin.getUid());
         operation_record.setOperationType(Constant.OPERATION_OBJECT.UPDATE);
+        operation_record.setObjectId(user.getUid());
         operation_record.setContent(content);
         operationRecordRepository.save(operation_record);
 
@@ -248,6 +249,7 @@ public class ShopController {
         content += normalizeKeyValuePair("all",all);
         OperationRecord operation_record = getOperationRecordWithNone();
         operation_record.setContent(content);
+        operation_record.setObjectId(-1L);
         List<DataGrade> data_grades = new ArrayList<DataGrade>();
         if(all != null) {
             User admin = (User)session.getAttribute("user");
@@ -257,13 +259,13 @@ public class ShopController {
             }
 
             operation_record.setMainUid(admin.getUid());
-            operation_record.setOperationType(Constant.OPERATION_NONE.GET_COMMODITY_GRADE);
+            operation_record.setOperationType(Constant.OPERATION_NONE.GET_SELLER_GRADE);
         } else {
             data_grades.addAll(getDataGradesByUid(Long.parseLong(uid)));
 
             User seller = (User)session.getAttribute("user");
             operation_record.setMainUid(seller.getUid());
-            operation_record.setOperationType(Constant.OPERATION_NONE.GET_SELLER_GRADE);
+            operation_record.setOperationType(Constant.OPERATION_NONE.GET_COMMODITY_GRADE);
         }
         operationRecordRepository.save(operation_record);
         return APIResult.createOK(data_grades);
@@ -295,6 +297,7 @@ public class ShopController {
         OperationRecord operation_record = getOperationRecordWithObject();
         operation_record.setMainUid(user_parent.getUid());
         operation_record.setOperationType(Constant.OPERATION_OBJECT.CREATE);
+        operation_record.setObjectId(user.getUid());
         operation_record.setContent(content);
         operationRecordRepository.save(operation_record);
 

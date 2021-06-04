@@ -9,11 +9,13 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Modifying;
 import org.springframework.data.jpa.repository.Query;
+import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
 /**
  * CommodityRepository
  */
+@Repository
 public interface CommodityRepository extends JpaRepository<Commodity,Long> {
 
     Commodity findByCidAndStatus(Long cid, Integer status);
@@ -25,6 +27,10 @@ public interface CommodityRepository extends JpaRepository<Commodity,Long> {
     Page<Commodity> findByUidAndStatus(Long uid, Integer status, Pageable pageable);
     Page<Commodity> findByStatusAndComStatus(Integer status, Integer com_status, Pageable pageable);
     Page<Commodity> findByStatusAndComStatusAndType(Integer status, Integer com_status, Integer type, Pageable pageable);
+
+    @Query(value = "select * from commodity where status = 0 and com_status = 1 order by(case when type = ?1 then 1 else 0 end) desc",nativeQuery = true)
+    Page<Commodity> findByfavouriteType(Integer type,Pageable pageable);
+
 
     @Transactional
     @Modifying

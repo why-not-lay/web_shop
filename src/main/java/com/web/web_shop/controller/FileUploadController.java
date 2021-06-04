@@ -36,13 +36,13 @@ import org.springframework.web.multipart.MultipartFile;
 public class FileUploadController {
 
     @Autowired
-    CommodityRepository commodityRepository;
+    private CommodityRepository commodityRepository;
     @Autowired
-    OperationRecordRepository operationRecordRepository;
+    private OperationRecordRepository operationRecordRepository;
     @Autowired
-    HttpServletRequest request;
+    private HttpServletRequest request;
     @Autowired
-    HttpSession session;
+    private HttpSession session;
 
     @Autowired()
     private StorageService storageService;

@@ -29,7 +29,7 @@
                 </div>
                 <div class="order_price" th:text="${trade.price}">单价</div>
                 <div class="order_number" th:text="${trade.number}">数量</div>
-                <div class="order_sum" th:text="${trade.number * trade.number}">小计</div>
+                <div class="order_sum" th:text="${trade.price * trade.number}">小计</div>
               </div>
             </div>
           </div>

@@ -61,6 +61,14 @@ document.getElementById('tran_register').onclick = function(){
   ele_login.style.display = "none";
   ele_register.style.display = "block";
 }
+var ele_register_input = ele_register.getElementsByTagName('input');
+ele_register_input[4].addEventListener('click',()=>{
+  if(ele_register_input[2].value !== ele_register_input[3].value){
+    window.alert("密码不一致，请重新输入");
+    ele_register_input[2].value = "";
+    ele_register_input[3].value = "";
+  }
+})
   </script>
 </html>
 

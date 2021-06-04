@@ -35,15 +35,15 @@ import org.springframework.web.bind.annotation.RestController;
 public class CommodityController {
 
     @Autowired
-    CommodityRepository commodityRepository;
+    private CommodityRepository commodityRepository;
     @Autowired
-    UserRepository userRepository;
+    private UserRepository userRepository;
     @Autowired
-    OperationRecordRepository operationRecordRepository;
+    private OperationRecordRepository operationRecordRepository;
     @Autowired
-    HttpSession session;
+    private HttpSession session;
     @Autowired
-    HttpServletRequest request;
+    private HttpServletRequest request;
 
 
     @RequestMapping(value = "/add",method = RequestMethod.POST)
@@ -244,8 +244,25 @@ public class CommodityController {
                     data_commodities.add(data_commodity);
                 }
             }
-        } else {
-            //用户
+        } else if(code == Constant.UserType.USER) {
+            //普通用户
+            Page<Commodity> commodities_container_onSale = null;
+            if(commodity_type == 10) {
+                Integer favourite_type = user.getFavouriteType();
+                if(favourite_type == -1) {
+                    commodities_container_onSale = commodityRepository.findByStatusAndComStatus(Constant.RecordStatus.EXIST, Constant.CommodityStatus.ON_SALE, pageable);
+                } else {
+                    commodities_container_onSale = commodityRepository.findByfavouriteType(favourite_type,pageable);
+                }
+            } else {
+                commodities_container_onSale = commodityRepository.findByStatusAndComStatusAndType(Constant.RecordStatus.EXIST, Constant.CommodityStatus.ON_SALE,commodity_type, pageable);
+            }
+            List<Commodity> commodities_onSale = commodities_container_onSale.getContent();
+            data_commodities = new ArrayList<DataCommodity>();
+            data_commodities.addAll(Util.tran2DataCommodityList(commodities_onSale,null,true));
+
+        } else if(code == Constant.UserType.NOT_USER) {
+            //非用户
             Page<Commodity> commodities_container_onSale = null;
             if(commodity_type == 10) {
                 commodities_container_onSale = commodityRepository.findByStatusAndComStatus(Constant.RecordStatus.EXIST, Constant.CommodityStatus.ON_SALE, pageable);

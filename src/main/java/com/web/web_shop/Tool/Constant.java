@@ -68,5 +68,13 @@ public final  class Constant {
         int USER = 2;
     }
 
+    public interface COMMODITY_TYPE {
+        int UNFLITER = 0;
+        int CLOTHES = 1;
+        int FOOD = 2;
+        int LIVE = 3;
+        int MOVE = 4;
+        int TOOL = 5;
+    }
 
 }
