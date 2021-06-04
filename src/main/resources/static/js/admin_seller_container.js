@@ -44,7 +44,7 @@ class SellerContainer{
     buttons[1].addEventListener('click',()=>{
       if(!this.certifyPassword()){
         window.alert("密码不一致，请重新输入");
-        this.container.getElementsByTagName('intput')[1].value = "";
+        this.container.getElementsByTagName('input')[1].value = "";
         this.container.getElementsByTagName('input')[2].value = "";
         return;
       }
