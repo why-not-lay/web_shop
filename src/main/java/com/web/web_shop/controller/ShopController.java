@@ -321,6 +321,7 @@ public class ShopController {
         String content = normalizeKeyValuePair("uid",uid);
         OperationRecord operation_record = getOperationRecordWithObject();
         operation_record.setMainUid(user.getUid());
+        operation_record.setObjectId(Long.parseLong(uid));
         operation_record.setOperationType(Constant.OPERATION_OBJECT.DELETE);
         operation_record.setContent(content);
         operationRecordRepository.save(operation_record);

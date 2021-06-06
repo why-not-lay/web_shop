@@ -1,5 +1,4 @@
 package com.web.web_shop.beans;
-
 import com.web.web_shop.Tool.Constant;
 
 /**

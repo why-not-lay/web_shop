@@ -159,7 +159,7 @@ public class UserController {
             onlineRecordRepository.save(online);
 
             User user = (User)session.getAttribute("user");
-            session.setAttribute("uid",user.getUid());
+            session.setAttribute("uid",user.getUid().toString());
             session.removeAttribute("user");
             session.removeAttribute("online");
         }

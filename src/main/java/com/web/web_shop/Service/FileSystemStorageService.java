@@ -124,7 +124,7 @@ public class FileSystemStorageService implements StorageService {
                 String new_path = "static/shop.png";
                 return this.loadAsResource(new_path);
             }
-            return this.loadAsResource(filenames[0].getName());
+            return this.loadAsResource(dirname + "/" + filenames[0].getName());
         } catch (Exception e) {
             throw new StorageFileNotFoundException("Could not read file: " + dirname, e);
         }

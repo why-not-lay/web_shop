@@ -30,7 +30,7 @@ class SellerContainer{
   }
 
   certifyPassword(){
-    var pw = this.container.getElementsByTagName('intput')[1].value;
+    var pw = this.container.getElementsByTagName('input')[1].value;
     var pw_c = this.container.getElementsByTagName('input')[2].value;
     return pw === pw_c;
   }

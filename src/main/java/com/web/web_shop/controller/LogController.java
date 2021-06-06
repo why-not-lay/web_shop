@@ -34,7 +34,7 @@ public class LogController {
 
     @RequestMapping(value = "/operation",method = RequestMethod.GET)
     public String getOperationRecord(ModelMap modelMap) {
-        List<OperationRecord> operation_records = operationRecordRepository.findAll();
+        List<OperationRecord> operation_records = operationRecordRepository.getRecords();
         modelMap.addAttribute("operation_records",operation_records);
         return "operation_record";
     }
