@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width" />
+    <title>在线日志记录</title>
+  </head>
+  <style>
+table{
+  border-collapse:collapse;
+  margin:0 auto;
+  margin-top:30px;
+  font-size:20px;
+  text-align:center;
+}
+td{
+  padding:3px;
+}
+  </style>
+  <body>
+    <table border="1">
+      <tr>
+        <td>UID</td>
+        <td>登录ip</td>
+        <td>登录时间</td>
+        <td>注销ip</td>
+        <td>注销时间</td>
+      </tr>
+      <tr th:each="online_record :${online_records}">
+        <td th:text="${online_record.uid}"></td>
+        <td th:text="${online_record.loginIp}"></td>
+        <td th:text="${online_record.loginDate}"></td>
+        <td th:text="${online_record.logoutIp}"></td>
+        <td th:text="${online_record.logoutDate}"></td>
+      </tr>
+    </table>
+  </body>
+</html>

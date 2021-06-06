@@ -19,7 +19,7 @@ class CommodityDetail {
     var number = data['number'];
     var type = data['type']? data['type'] : "0";
     var desc = data['desc'];
-    var cid = this.binding_item.getAttribute('cid');
+    var cid = this.binding_item ? this.binding_item.getAttribute('cid') : "";
 
     document.getElementById('create_title').getElementsByTagName('h2')[0].innerText = title;
     document.getElementById('create_desc_name').getElementsByTagName('input')[0].value = name;
@@ -27,7 +27,7 @@ class CommodityDetail {
     document.getElementById('create_desc_number').getElementsByTagName('input')[0].value = number;
     document.getElementById('create_desc_type').getElementsByTagName('select')[0].value = type;
     document.getElementById('create_desc_description').getElementsByTagName('textarea')[0].value = desc;
-    this.setPic("/pic/get?cid="+cid);
+    cid && this.setPic("/pic/get?cid="+cid);
   }
 
   getValue(){
